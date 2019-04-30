@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <color name="primary">#2196F3</color> <!-- 500 -->
+  <color name="primary_dark">#1976D2</color> <!-- 700 -->
+  <color name="primary_text_color">#FFFFFF</color> <!-- depend on primary 500 -->
+  <color name="accent">#42A5F5</color> <!-- 400 -->
+  <color name="navigation_bar">#42A5F5</color> <!-- 400 -->
+
+  <color name="action_menu_background">#2196F3</color> <!-- 500 -->
+  <color name="action_menu_text_color">#FFFFFF</color> <!-- depend on primary 500 -->
+  
+  <color name="window_dark_background">#000000</color>
+  <color name="window_light_background">#FFFFFF</color>
+
+  <color name="button_text_color">#FFFFFF</color> <!-- depend on primary 500 -->
+
+  <color name="selection_background">#90CAF9</color> <!--- 200 -->
+
+  <color name="group_separator_color">#AEAEAE</color>
+
+  <color name="nav_end_background">#1565C0</color> <!-- 800 -->
+  <color name="nav_center_background">#2196F3</color> <!-- 500 -->
+  <color name="nav_start_background">#42A5F5</color> <!-- 400 -->
+
+  <color name="nav_header_title_text_color">#FFFFFF</color>
+  <color name="nav_header_subtitle_text_color">#FFFFFF</color>
+
+  <color name="progress_dialog_background">#2196F3</color> <!-- 500 -->
+  <color name="progress_text_color">#FFFFFF</color> <!-- depend on primary 500 -->
+  <color name="progress_bar_color">#000000</color> <!-- depend on accent 400 -->
+  <color name="progress_text_color_inverse">#42A5F5</color> <!-- 400 -->
+  <color name="progress_bar_color_inverse">#42A5F5</color>  <!-- 400 -->
+</resources>
