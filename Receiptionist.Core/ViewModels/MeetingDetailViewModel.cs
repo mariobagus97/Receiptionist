@@ -107,7 +107,7 @@ namespace Receiptionist.Core.ViewModels
                 this.Item = meeting;
 
                 //  this.ExecuteNotify(null);
-               // this.NotifyEmail(null);
+                this.NotifyEmail(null);
             }
 
             catch (Exception ex)

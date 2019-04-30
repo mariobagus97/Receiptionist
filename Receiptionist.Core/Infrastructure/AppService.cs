@@ -13,7 +13,7 @@ namespace Receiptionist.Infrastructure
     public sealed class CrosslightAppAppService : ApplicationServiceBase
     {
         #region Constructors
-        
+
         public CrosslightAppAppService(IApplicationContext context)
             : base(context)
         {
@@ -21,23 +21,14 @@ namespace Receiptionist.Infrastructure
 
         #endregion
 
-        #region Properties
-
-        protected ISQLiteAsyncConnection Db
-        {
-            get; set;
-        }
-
-        #endregion
-
         #region Methods
-        
+
         protected override void OnStart(StartParameter parameter)
         {
             base.OnStart(parameter);
             this.InitializeSettingTable();
             this.Initialize();
-            
+
             this.SetRootViewModel<HomeViewModel>();
         }
 
@@ -47,7 +38,7 @@ namespace Receiptionist.Infrastructure
             Container.Current.RegisterInstance(appViewModel);
         }
 
-        private  void InitializeSettingTable()
+        private void InitializeSettingTable()
         {
             string dbName = "receptionist.db3";
 
@@ -66,15 +57,13 @@ namespace Receiptionist.Infrastructure
             {
                 List<GeneralSetting> generalsetting = new List<GeneralSetting>();
 
-                generalsetting.Add(new GeneralSetting() { SettingId = Guid.NewGuid(),GeneralName = "barcode" });
+                generalsetting.Add(new GeneralSetting() { SettingId = Guid.NewGuid(), GeneralName = "barcode" });
 
                 db.InsertAll(generalsetting);
             }
-           
-
         }
 
-        }
-    
-        #endregion
     }
+
+    #endregion
+}

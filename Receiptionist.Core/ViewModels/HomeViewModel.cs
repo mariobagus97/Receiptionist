@@ -1,12 +1,9 @@
 ﻿using Intersoft.Crosslight;
-using Intersoft.Crosslight.Data.SQLite;
 using Intersoft.Crosslight.Input;
-using Intersoft.Crosslight.Mobile;
 using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
 using Receiptionist.Core.ModelServices;
 using Receiptionist.Core.ViewModels;
-using System;
 using System.Collections.Generic;
 
 namespace Receiptionist.ViewModels
@@ -23,8 +20,7 @@ namespace Receiptionist.ViewModels
         }
 
         #endregion
-
-
+        
         #region Properties
 
         public GeneralSettingRepository GeneralSettingRepository { get; set; }
@@ -34,10 +30,8 @@ namespace Receiptionist.ViewModels
 
         #endregion
 
-
         #region Methods
-
-
+        
         public async void ExecuteMeeting(object parameter)
         {
             IList<GeneralSetting> generalsetting = await GeneralSettingRepository.GetAllAsync();

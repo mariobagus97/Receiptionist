@@ -1,8 +1,7 @@
 ﻿using Intersoft.Crosslight;
 using Intersoft.Crosslight.RestClient;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Receiptionist.ModelServices;
+using System.Threading.Tasks;
 
 
 namespace Receiptionist.Core.ModelServices
@@ -12,7 +11,7 @@ namespace Receiptionist.Core.ModelServices
 
         #region Fields
 
-        private string baseUrl = "http://192.168.0.65:58360";
+        private string baseUrl = "http://192.168.1.56:58360";
 
         #endregion
 

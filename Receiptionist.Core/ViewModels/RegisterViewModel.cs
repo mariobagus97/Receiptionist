@@ -83,7 +83,7 @@ namespace Receiptionist.ViewModels
                     };
 
                     this.NavigationService.Navigate<PurposeViewModel>(new NavigationParameter() { Data = visitor });
-                    this.NavigationService.Close();
+                    //this.NavigationService.Close();
                 }
             }
 

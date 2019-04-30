@@ -10,17 +10,17 @@ namespace Receiptionist.Core.ViewModels
         #region Constructor
         public AppViewModel()
         {
-            _meetingRepository = new MeetingRepository();
+            MeetingRepository = new MeetingRepository();
         }
         #endregion
 
         #region Fields
-        private Meeting _meeting;
-        private MeetingRepository _meetingRepository;
+        
         #endregion
 
         #region Properties
         public Meeting Meeting { get; set; }
+        private MeetingRepository MeetingRepository;
         #endregion
 
 
@@ -28,7 +28,7 @@ namespace Receiptionist.Core.ViewModels
 
         public async Task<Meeting> CreateMeeting (Meeting meeting)
         {
-            Meeting = await this._meetingRepository.InsertAsync(meeting);
+            Meeting = await this.MeetingRepository.InsertAsync(meeting);
             return Meeting;
         }
         #endregion
