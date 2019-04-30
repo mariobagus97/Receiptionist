@@ -18,9 +18,11 @@ namespace Receiptionist.ViewModels
 
         #region Private
         private string _phoneText;
+        private string _cobagithub;
         #endregion
 
         #region Properties
+
         public DelegateCommand NextCommand { get; set; }
         public string NameText { get; set; }
         public string EmailText { get; set; }
