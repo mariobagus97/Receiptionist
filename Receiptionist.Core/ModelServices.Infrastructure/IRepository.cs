@@ -8,5 +8,7 @@ namespace Receiptionist.ModelServices
         Task<T>UpdateAsync(T entity);
         Task<T> GetSingleAsync();
 
+        Task<T> GetVisitorAsync(T entity);
+
     }
 }

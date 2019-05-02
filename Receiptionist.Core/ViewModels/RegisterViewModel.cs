@@ -2,7 +2,10 @@
 using Intersoft.Crosslight.Input;
 using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
+using Receiptionist.Core.ViewModels;
+using Receiptionist.Infrastructure;
 using System;
+using System.Collections.Generic;
 
 namespace Receiptionist.ViewModels
 {
@@ -18,7 +21,6 @@ namespace Receiptionist.ViewModels
 
         #region Private
         private string _phoneText;
-        private string _cobagithub;
         #endregion
 
         #region Properties
@@ -39,11 +41,16 @@ namespace Receiptionist.ViewModels
             }
         }
         public string CompanyText { get; set; }
-        
+
+        public AppViewModel AppViewModel
+        {
+            get { return Container.Current.Resolve<AppViewModel>(); }
+        }
+
         #endregion
 
         #region Methods
-        
+
         public void ExecuteNext(object parameter)
         {
             try
@@ -81,9 +88,10 @@ namespace Receiptionist.ViewModels
                         Phone = this.PhoneText,
                         Company = this.CompanyText
                     };
+                    AppViewModel.Meeting.Visitors = new List<Visitor>();
+                    AppViewModel.Meeting.Visitors.Add(visitor);
 
                     this.NavigationService.Navigate<PurposeViewModel>(new NavigationParameter() { Data = visitor });
-                    //this.NavigationService.Close();
                 }
             }
 

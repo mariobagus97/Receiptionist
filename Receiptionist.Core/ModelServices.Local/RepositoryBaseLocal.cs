@@ -63,5 +63,10 @@ namespace Receiptionist.Core.ModelServices.Local
             T items = await this.Db.Table<T>().FirstOrDefaultAsync();
             return items;
         }
+
+        public virtual  Task<T> GetVisitorAsync(T entity)
+        {
+            return null;
+        }
     }
 }

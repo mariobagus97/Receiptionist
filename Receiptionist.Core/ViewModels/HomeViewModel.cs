@@ -13,25 +13,20 @@ namespace Receiptionist.ViewModels
     public class HomeViewModel : ViewModelBase
     {
         #region Constructors
-
         public  HomeViewModel()
         {
             this.MeetingCommand = new DelegateCommand(ExecuteMeeting);
             this.SettingCommand = new DelegateCommand(ExecuteSetting);
         }
-
         #endregion
 
         #region Properties
-        
         public GeneralSetting GeneralSetting
         {
             get { return Container.Current.Resolve<GeneralSetting>(); }
         }
-
         public DelegateCommand MeetingCommand { get; set; }
         public DelegateCommand SettingCommand { get; set; }
-       
 
         #endregion
 

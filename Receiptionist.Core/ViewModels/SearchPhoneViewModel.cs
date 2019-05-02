@@ -3,8 +3,11 @@ using Intersoft.Crosslight.Input;
 using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
 using Receiptionist.Core.ModelServices;
+using Receiptionist.Core.ModelServices.Infrastructure;
 using Receiptionist.Core.ViewModels;
+using Receiptionist.Infrastructure;
 using System;
+using System.Collections.Generic;
 
 namespace Receiptionist.ViewModels
 {
@@ -15,15 +18,23 @@ namespace Receiptionist.ViewModels
         public SearchPhoneViewModel()
         {
             this.PhoneCommand = new DelegateCommand(ExecutePhoneVisitor);
-            VisitorRepository = new VisitorRepository();
+           
         }
 
         #endregion
 
         #region Properties
 
-        public VisitorRepository VisitorRepository { get; set; }
-        
+        public IVisitorRepository VisitorRepository
+        {
+            get { return Container.Current.Resolve<IVisitorRepository>(); }
+        }
+
+        //public AppViewModel AppViewModel
+        //{
+        //    get { return Container.Current.Resolve<AppViewModel>(); }
+        //}
+
         public DelegateCommand PhoneCommand { get; set; }
 
         public string SearchPhone { get; set; }
@@ -36,7 +47,7 @@ namespace Receiptionist.ViewModels
         {
             try
             {
-                Visitor visitor = new Visitor();
+                
                 if (string.IsNullOrEmpty(this.SearchPhone))
                 {
                     this.MessagePresenter.Show("Masukan nomor handphone");
@@ -44,10 +55,11 @@ namespace Receiptionist.ViewModels
 
                 else
                 {
-                    Meeting meeting = new Meeting();
-                    AppViewModel app = new AppViewModel();
-                    
-                    visitor.Phone = this.SearchPhone;
+
+                    Visitor visitor = new Visitor
+                    {
+                        Phone = this.SearchPhone
+                    };
                     Visitor visitors = await this.VisitorRepository.GetVisitorAsync(visitor);
                     
                     if (visitors.Name == null)
@@ -57,6 +69,7 @@ namespace Receiptionist.ViewModels
                     else
                     {
                         this.NavigationService.Navigate<PurposeViewModel>(new NavigationParameter() { Data = visitors });
+                        
                     }
                 }
             }

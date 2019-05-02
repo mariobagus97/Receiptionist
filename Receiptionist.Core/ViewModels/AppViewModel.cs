@@ -1,6 +1,7 @@
 ﻿using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
 using Receiptionist.Core.ModelServices;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Receiptionist.Core.ViewModels
@@ -32,6 +33,12 @@ namespace Receiptionist.Core.ViewModels
             Meeting = await this.MeetingRepository.InsertAsync(meeting);
             return Meeting;
         }
+
+        //public void CreateNewMeeting()
+        //{
+        //    Meeting.Visitors = new List<Visitor>();
+        //    Meeting.Employees = new List<Employee>();
+        //}
         #endregion
     }
 }

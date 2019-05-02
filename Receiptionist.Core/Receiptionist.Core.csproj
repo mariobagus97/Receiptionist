@@ -51,6 +51,7 @@
     <Compile Include="ModelServices.Infrastructure\IGeneralSettingRepository.cs" />
     <Compile Include="ModelServices.Infrastructure\IMeetingRepository.cs" />
     <Compile Include="ModelServices.Infrastructure\IRepository.cs" />
+    <Compile Include="ModelServices.Infrastructure\IVisitorRepository.cs" />
     <Compile Include="ModelServices.Local\GeneralSettingRepository.cs" />
     <Compile Include="ModelServices.Local\RepositoryBaseLocal.cs" />
     <Compile Include="ModelServices.WebApi\VisitorRepository.cs" />
