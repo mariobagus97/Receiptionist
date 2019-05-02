@@ -108,6 +108,16 @@ namespace Receiptionist.Core.ModelServices
             return data;
         }
 
+        public virtual  Task<T> UpdateAsync(T entity)
+        {
+            return null;
+        }
+
+         public virtual  Task<T> GetSingleAsync()
+        {
+            return null;
+        }
+
         #endregion
     }
 }

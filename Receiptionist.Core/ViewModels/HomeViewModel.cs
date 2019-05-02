@@ -3,7 +3,9 @@ using Intersoft.Crosslight.Input;
 using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
 using Receiptionist.Core.ModelServices;
+using Receiptionist.Core.ModelServices.Infrastructure;
 using Receiptionist.Core.ViewModels;
+using Receiptionist.Infrastructure;
 using System.Collections.Generic;
 
 namespace Receiptionist.ViewModels
@@ -16,14 +18,17 @@ namespace Receiptionist.ViewModels
         {
             this.MeetingCommand = new DelegateCommand(ExecuteMeeting);
             this.SettingCommand = new DelegateCommand(ExecuteSetting);
-            GeneralSettingRepository = new GeneralSettingRepository();
         }
 
         #endregion
-        
-        #region Properties
 
-        public GeneralSettingRepository GeneralSettingRepository { get; set; }
+        #region Properties
+        
+        public GeneralSetting GeneralSetting
+        {
+            get { return Container.Current.Resolve<GeneralSetting>(); }
+        }
+
         public DelegateCommand MeetingCommand { get; set; }
         public DelegateCommand SettingCommand { get; set; }
        
@@ -32,15 +37,17 @@ namespace Receiptionist.ViewModels
 
         #region Methods
         
-        public async void ExecuteMeeting(object parameter)
+        public void ExecuteMeeting(object parameter)
         {
-            IList<GeneralSetting> generalsetting = await GeneralSettingRepository.GetAllAsync();
-
             Setting setting = new Setting();
 
-            foreach (var settings in generalsetting)
+            if (GeneralSetting.GeneralNameJson != null)
             {
-                setting = SimpleJson.DeserializeObject<Setting>(settings.GeneralNameJson);
+                setting = SimpleJson.DeserializeObject<Setting>(GeneralSetting.GeneralNameJson);
+            }
+            else
+            {
+                setting.HasBarcode = false;
             }
 
             if (setting == null || setting.HasBarcode == true  )
@@ -51,25 +58,11 @@ namespace Receiptionist.ViewModels
             {
                 this.NavigationService.Navigate<SearchPhoneViewModel>(new NavigationParameter());
             }
-
         }
 
-        public async void ExecuteSetting(object parameter)
+        public void ExecuteSetting(object parameter)
         {
-            Setting setting = new Setting();
-
-            GeneralSetting generalsetting = await GeneralSettingRepository.GetSingleAsync();
-
-            if (generalsetting.GeneralNameJson != null)
-            {
-                setting = SimpleJson.DeserializeObject<Setting>(generalsetting.GeneralNameJson);
-            }
-            else
-            {
-                setting.GeneralName = generalsetting.GeneralName;
-                setting.SettingId = generalsetting.SettingId;
-            }
-            this.NavigationService.Navigate<SettingViewModel>(new NavigationParameter() {Data = setting } );
+            this.NavigationService.Navigate<SettingViewModel>(new NavigationParameter());
         }
         #endregion
     }

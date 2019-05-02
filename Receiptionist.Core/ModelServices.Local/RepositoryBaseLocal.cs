@@ -52,6 +52,12 @@ namespace Receiptionist.Core.ModelServices.Local
             return items.ToObservable();
         }
 
+        public virtual async Task<T> UpdateAsync(T entity)
+        {
+            await this.Db.UpdateAsync(entity);
+            return null;
+        }
+
         public virtual async Task<T> GetSingleAsync()
         {
             T items = await this.Db.Table<T>().FirstOrDefaultAsync();

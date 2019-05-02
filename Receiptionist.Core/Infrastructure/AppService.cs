@@ -7,6 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Receiptionist.Core.ViewModels;
+using Receiptionist.Core.ModelServices;
+using Receiptionist.Core.ModelServices.Infrastructure;
+using Intersoft.Crosslight.Containers;
 
 namespace Receiptionist.Infrastructure
 {
@@ -28,6 +31,8 @@ namespace Receiptionist.Infrastructure
             base.OnStart(parameter);
             this.InitializeSettingTable();
             this.Initialize();
+            this.InitializeSetting();
+            this.InitializeRepositories();
 
             this.SetRootViewModel<HomeViewModel>();
         }
@@ -36,6 +41,18 @@ namespace Receiptionist.Infrastructure
         {
             AppViewModel appViewModel = new AppViewModel();
             Container.Current.RegisterInstance(appViewModel);
+        }
+
+        private async void InitializeSetting()
+        {
+            GeneralSettingRepository generalSettingRepository = new GeneralSettingRepository();
+            GeneralSetting generalsetting = await generalSettingRepository.GetSingleAsync();
+            Container.Current.RegisterInstance(generalsetting);
+        }
+
+        private void InitializeRepositories()
+        {
+            Container.Current.Register<IGeneralSettingRepository, GeneralSettingRepository>().WithLifetimeManager(new ContainerLifetime());
         }
 
         private void InitializeSettingTable()
@@ -56,9 +73,7 @@ namespace Receiptionist.Infrastructure
             if (db.Table<GeneralSetting>().ToList().Count == 0)
             {
                 List<GeneralSetting> generalsetting = new List<GeneralSetting>();
-
                 generalsetting.Add(new GeneralSetting() { SettingId = Guid.NewGuid(), GeneralName = "barcode" });
-
                 db.InsertAll(generalsetting);
             }
         }

@@ -1,9 +1,9 @@
 ﻿using Intersoft.Crosslight;
-using Intersoft.Crosslight.Data.SQLite;
-using Intersoft.Crosslight.Mobile;
 using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.FormMetaData;
 using Receiptionist.Core.Models;
+using Receiptionist.Core.ModelServices.Infrastructure;
+using Receiptionist.Infrastructure;
 using System;
 using System.ComponentModel;
 
@@ -14,28 +14,25 @@ namespace Receiptionist.Core.ViewModels
         #region Constructor
         public SettingViewModel()
         {
-            string dbName = "receptionist.db3";
-
-            ILocalStorageService storageService = ServiceProvider.GetService<ILocalStorageService>();
-            IActivatorService activatorService = ServiceProvider.GetService<IActivatorService>();
-            var factory = activatorService.CreateInstance<Func<string, ISQLiteAsyncConnection>>();
-
-            this.Db = factory(storageService.GetFilePath(dbName, LocalFolderKind.Data));
-
         }
         #endregion
 
         #region Properties
-        protected ISQLiteAsyncConnection Db
+        
+        public GeneralSetting GeneralSetting
         {
-            get; set;
+            get { return Container.Current.Resolve<GeneralSetting>(); }
+        }
+
+        public IGeneralSettingRepository GeneralSettingRepository
+        {
+            get { return Container.Current.Resolve<IGeneralSettingRepository>(); }
         }
 
         public override Type FormMetadataType
         {
             get { return typeof(SettingFormMetaData); }
         }
-
         #endregion
 
         #region Method
@@ -47,18 +44,26 @@ namespace Receiptionist.Core.ViewModels
         protected async override void ExecuteSave(object parameter)
         {
             string data = SimpleJson.SerializeObject(this.Item);
-            
-            GeneralSetting generalsetting = new GeneralSetting()
-            { SettingId = this.Item.SettingId, GeneralName = this.Item.GeneralName, GeneralNameJson = data };
-            
-            await Db.UpdateAsync(generalsetting);
+
+            GeneralSetting.GeneralNameJson = data;
+
+            await GeneralSettingRepository.UpdateAsync(GeneralSetting);
             base.ExecuteSave(parameter);
         }
         
         public  override void Navigated(NavigatedParameter parameter)
         {
+            this.Item = new Setting();
+            if (GeneralSetting.GeneralNameJson != null)
+            {
+                this.Item = SimpleJson.DeserializeObject<Setting>(GeneralSetting.GeneralNameJson);
+            }
+            else
+            {
+                this.Item.GeneralName = GeneralSetting.GeneralName;
+                this.Item.SettingId = GeneralSetting.SettingId;
+            }
             base.Navigated(parameter);
-            this.Item = parameter.Data as Setting;
         }
 
         protected override void OnItemChanged(Setting newItem)

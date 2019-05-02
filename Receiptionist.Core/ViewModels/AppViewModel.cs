@@ -20,6 +20,7 @@ namespace Receiptionist.Core.ViewModels
 
         #region Properties
         public Meeting Meeting { get; set; }
+
         private MeetingRepository MeetingRepository;
         #endregion
 

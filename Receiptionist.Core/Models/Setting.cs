@@ -14,7 +14,6 @@ namespace Receiptionist.Core.Models
     public class Setting : ModelBase
     {
         private Guid _settingId;
-        // private bool? _hasBarcode;
 
          private string _generalName;
 
@@ -46,19 +45,7 @@ namespace Receiptionist.Core.Models
                 }
             }
         }
-
-        //public bool? HasBarcode
-        //{
-        //    get { return _hasBarcode; }
-        //    set
-        //    {
-        //        if (_hasBarcode != value)
-        //        {
-        //            _hasBarcode = value;
-        //            this.OnPropertyChanged("HasBarcode");
-        //        }
-        //    }
-        //}
+        
 
         public bool HasBarcode
         {
