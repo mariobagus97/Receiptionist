@@ -39,6 +39,8 @@ namespace Receiptionist.ViewModels
 
         public string SearchPhone { get; set; }
 
+        public Visitor Visitor { get; set; }
+
         #endregion
 
         #region Method
@@ -83,6 +85,9 @@ namespace Receiptionist.ViewModels
         public  override void Navigated(NavigatedParameter parameter)
         {
             base.Navigated(parameter);
+
+            this.Visitor = new Visitor();
+            this.AppViewModel.Meeting.Visitors.Add(this.Visitor);
         }
 
         #endregion

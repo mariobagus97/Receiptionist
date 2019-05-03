@@ -2,11 +2,8 @@
 using Intersoft.Crosslight.Input;
 using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
-using Receiptionist.Core.ModelServices;
-using Receiptionist.Core.ModelServices.Infrastructure;
 using Receiptionist.Core.ViewModels;
 using Receiptionist.Infrastructure;
-using System.Collections.Generic;
 
 namespace Receiptionist.ViewModels
 {
