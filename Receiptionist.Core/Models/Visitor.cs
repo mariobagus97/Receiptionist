@@ -12,7 +12,7 @@ namespace Receiptionist.Core.Models
        
         public Visitor()
         {
-            //this.VisitorMeetings = new HashSet<VisitorMeeting>();
+            
         }
 
         public System.Guid VisitorID { get; set; }

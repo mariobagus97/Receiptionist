@@ -2,7 +2,7 @@
 using Intersoft.Crosslight.Input;
 using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
-using Receiptionist.Core.ModelServices;
+using Receiptionist.Core.ModelServices.Infrastructure;
 using Receiptionist.Core.ViewModels;
 using Receiptionist.Infrastructure;
 using System;
@@ -19,13 +19,11 @@ namespace Receiptionist.ViewModels
         {
             this.SearchEmployeeCommand = new DelegateCommand(ExecuteSearchEmployee);
             this.DoneCommand = new DelegateCommand(ExecuteDone);
-            MeetingRepository = new MeetingRepository();
         }
 
         #endregion
 
         #region Properties
-        public MeetingRepository MeetingRepository { get; set; }
         public DelegateCommand SearchEmployeeCommand { get; set; }
         public DelegateCommand DoneCommand { get; set; }
         public string SearchEmployee { get; set; }
@@ -35,13 +33,17 @@ namespace Receiptionist.ViewModels
             get { return Container.Current.Resolve<AppViewModel>(); }
         }
 
+        public IMeetingRepository MeetingRepository
+        {
+            get { return Container.Current.Resolve<IMeetingRepository>(); }
+        }
+
         #endregion
 
         public async void ExecuteDone(object parameter)
         {
             try
             {
-                
                 Meeting Meeting = new Meeting();
                 Meeting = this.Item;
                 
@@ -65,30 +67,28 @@ namespace Receiptionist.ViewModels
 
         public async void ExecuteSearchEmployee(object parameter)
         {
-            Meeting meeting = new Meeting();
-            meeting = this.Item;
+            //Meeting meeting = new Meeting();
+            //meeting = this.Item;
 
-            meeting.Employees = new List<Employee>();
+           // meeting.Employees = new List<Employee>();
             Employee employee = new Employee();
             employee.Name = this.SearchEmployee;
 
-            meeting.Employees.Add(employee);
-            
-           
+            AppViewModel.Meeting.Employees.Add(employee);
+            //meeting.Employees.Add(employee);
+
            if (string.IsNullOrEmpty(this.SearchEmployee))
             {
                 this.MessagePresenter.Show("Masukan email karyawan");
             }
-           
             else
             {
                 try
                 {
                     this.ToastPresenter.Show("Waiting...");
 
-                    Meeting meetingin = await this.MeetingRepository.GetEmployeeAsync(meeting);
+                    Meeting meetingin = await this.MeetingRepository.GetEmployeeAsync(AppViewModel.Meeting);
                     
-
                     if (meetingin.Employees.Count == 0)
                     {
                         this.MessagePresenter.Show("Karyawan tidak ditemukan");
@@ -121,7 +121,7 @@ namespace Receiptionist.ViewModels
 
                             }, (dialogResult) =>
                         {
-                            var viewModel = dialogResult.ViewModel as ListEmployeeViewModel; //((ListEmployeeViewModel)dialogResult.ViewModel);
+                            var viewModel = dialogResult.ViewModel as ListEmployeeViewModel; 
 
                             string button = dialogResult.Button.ToString();
 
@@ -137,7 +137,6 @@ namespace Receiptionist.ViewModels
                                     meetingin.Employees.Add(employees);
 
                                     this.Item = meetingin;
-
                                     this.ExecuteDone(null);
                                 }
                                 else
@@ -150,7 +149,6 @@ namespace Receiptionist.ViewModels
                                 meetingin = new Meeting();
                                 this.Item = meetingin;
                                 this.ToastPresenter.Show("Anda belum memilih karyawan");
-
                             }
                             
                         } );
@@ -166,8 +164,8 @@ namespace Receiptionist.ViewModels
         public  override void Navigated(NavigatedParameter parameter)
         {
             base.Navigated(parameter);
-            Meeting meeting = parameter.Data as Meeting;
-            this.Item = meeting;
+            //Meeting meeting = parameter.Data as Meeting;
+            //this.Item = meeting;
         }
         
     }

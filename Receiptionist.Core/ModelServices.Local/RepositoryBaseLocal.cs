@@ -68,5 +68,15 @@ namespace Receiptionist.Core.ModelServices.Local
         {
             return null;
         }
+
+        public virtual Task<T> GetEmployeeAsync(T entity)
+        {
+            return null;
+        }
+
+        public virtual Task<T> GetMeetingAsync(T entity)
+        {
+            return null;
+        }
     }
 }

@@ -90,8 +90,7 @@ namespace Receiptionist.ViewModels
                     };
                     AppViewModel.Meeting.Visitors = new List<Visitor>();
                     AppViewModel.Meeting.Visitors.Add(visitor);
-
-                    this.NavigationService.Navigate<PurposeViewModel>(new NavigationParameter() { Data = visitor });
+                    this.NavigationService.Navigate<PurposeViewModel>(new NavigationParameter());
                 }
             }
 

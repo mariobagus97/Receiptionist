@@ -48,6 +48,7 @@
     <Compile Include="FormMetaData\VisitorFormMetaData.cs" />
     <Compile Include="Infrastructure\AppService.cs" />
     <Compile Include="Infrastructure\Container.cs" />
+    <Compile Include="ModelServices.Infrastructure\IEmployeeRepository.cs" />
     <Compile Include="ModelServices.Infrastructure\IGeneralSettingRepository.cs" />
     <Compile Include="ModelServices.Infrastructure\IMeetingRepository.cs" />
     <Compile Include="ModelServices.Infrastructure\IRepository.cs" />

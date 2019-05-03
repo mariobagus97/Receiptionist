@@ -3,8 +3,10 @@ using Intersoft.Crosslight.Input;
 using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
 using Receiptionist.Core.ModelServices;
+using Receiptionist.Infrastructure;
 using Receiptionist.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Receiptionist.Core.ViewModels
@@ -43,6 +45,10 @@ namespace Receiptionist.Core.ViewModels
         public Timer Timer { get; set; }
         public DelegateCommand CloseCommand { get; set; }
         public DelegateCommand NotifyCommand { get; set; }
+        public AppViewModel AppViewModel
+        {
+            get { return Container.Current.Resolve<AppViewModel>(); }
+        }
 
         #endregion
 
@@ -118,6 +124,12 @@ namespace Receiptionist.Core.ViewModels
 
         public void ExecuteClose(object parameter)
         {
+            AppViewModel.Meeting = new Meeting
+            {
+                Employees = new List<Employee>(),
+                Visitors = new List<Visitor>()
+            };
+
             this.NavigationService.Navigate<HomeViewModel>(new NavigationParameter());
             this.NavigationService.Close();
         }

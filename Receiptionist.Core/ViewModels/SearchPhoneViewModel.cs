@@ -30,10 +30,10 @@ namespace Receiptionist.ViewModels
             get { return Container.Current.Resolve<IVisitorRepository>(); }
         }
 
-        //public AppViewModel AppViewModel
-        //{
-        //    get { return Container.Current.Resolve<AppViewModel>(); }
-        //}
+        public AppViewModel AppViewModel
+        {
+            get { return Container.Current.Resolve<AppViewModel>(); }
+        }
 
         public DelegateCommand PhoneCommand { get; set; }
 
@@ -64,12 +64,13 @@ namespace Receiptionist.ViewModels
                     
                     if (visitors.Name == null)
                     {
-                        this.NavigationService.Navigate<RegisterViewModel>(new NavigationParameter() { Data = visitor });
+                        this.NavigationService.Navigate<RegisterViewModel>(new NavigationParameter());
+                        AppViewModel.Meeting.Visitors.Add(visitor);
                     }
                     else
                     {
-                        this.NavigationService.Navigate<PurposeViewModel>(new NavigationParameter() { Data = visitors });
-                        
+                        this.NavigationService.Navigate<PurposeViewModel>(new NavigationParameter());
+                        AppViewModel.Meeting.Visitors.Add(visitors);
                     }
                 }
             }

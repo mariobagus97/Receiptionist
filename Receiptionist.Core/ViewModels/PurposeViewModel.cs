@@ -2,68 +2,61 @@
 using Intersoft.Crosslight.Input;
 using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
+using Receiptionist.Core.ViewModels;
+using Receiptionist.Infrastructure;
 using System;
-using System.Collections.Generic;
 
 namespace Receiptionist.ViewModels
 {
-    public class PurposeViewModel : EditorViewModelBase<Meeting>
+    public class PurposeViewModel : ViewModelBase
     {
         #region Constructors
-        
         public PurposeViewModel()
         {
             this.VisitingCommand = new DelegateCommand(ExecuteVisiting);
             this.DeliveryCommand = new DelegateCommand(ExecuteDelivery);
             this.MeetingCommand = new DelegateCommand(ExecuteMeeting);
         }
-
         #endregion
-        
+
 
         #region Properties
         public DelegateCommand VisitingCommand { get; set; }
         public DelegateCommand DeliveryCommand { get; set; }
         public DelegateCommand MeetingCommand { get; set; }
         public Meeting Meeting { get; set; }
-
+        public AppViewModel AppViewModel
+        {
+            get { return Container.Current.Resolve<AppViewModel>(); }
+        }
         #endregion
 
 
         #region Methods
-        
+
         public void ExecuteMeeting(object parameter)
         {
-            Meeting.Purpose = "Meeting";
-            this.NavigationService.Navigate<SearchEmployeeViewModel>(new NavigationParameter() { Data = Meeting });
+            AppViewModel.Meeting.Purpose = "Meeting";
+            this.NavigationService.Navigate<SearchEmployeeViewModel>(new NavigationParameter());
         }
 
         public void ExecuteDelivery(object parameter)
         {
-            Meeting.Purpose = "Delivery";
-            this.NavigationService.Navigate<SearchEmployeeViewModel>(new NavigationParameter() { Data = Meeting });
+            AppViewModel.Meeting.Purpose = "Delivery";
+            this.NavigationService.Navigate<SearchEmployeeViewModel>(new NavigationParameter());
         }
 
         public void ExecuteVisiting(object parameter)
         {
-            Meeting.Purpose = "Visiting";
-            this.NavigationService.Navigate<SearchEmployeeViewModel>(new NavigationParameter() { Data = Meeting });
+            AppViewModel.Meeting.Purpose = "Visiting";
+            this.NavigationService.Navigate<SearchEmployeeViewModel>(new NavigationParameter());
         }
 
-        public  override void Navigated(NavigatedParameter parameter)
+        public override void Navigated(NavigatedParameter parameter)
         {
             base.Navigated(parameter);
-
-            Visitor visitor = parameter.Data as Visitor;
-            Meeting = new Meeting
-            {
-                MeetingID = Guid.NewGuid(),
-                Visitors = new List<Visitor>()
-            };
-
-            Meeting.Visitors.Add(visitor);
+            AppViewModel.Meeting.MeetingID = Guid.NewGuid();
         }
-
         #endregion
     }
 }

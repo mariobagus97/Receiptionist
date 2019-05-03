@@ -39,9 +39,14 @@ namespace Receiptionist.Infrastructure
 
         private void Initialize()
         {
-            AppViewModel appViewModel = new AppViewModel();
-            appViewModel.Meeting = new Meeting();
-            appViewModel.Meeting.Visitors = new List<Visitor>();
+            AppViewModel appViewModel = new AppViewModel
+            {
+                Meeting = new Meeting
+                {
+                    Visitors = new List<Visitor>(),
+                    Employees = new List<Employee>()
+                }
+            };
             Container.Current.RegisterInstance(appViewModel);
         }
         
@@ -56,8 +61,9 @@ namespace Receiptionist.Infrastructure
         private void InitializeRepositories()
         {
             Container.Current.Register<IVisitorRepository, VisitorRepository>().WithLifetimeManager(new ContainerLifetime());
-
             Container.Current.Register<IGeneralSettingRepository, GeneralSettingRepository>().WithLifetimeManager(new ContainerLifetime());
+            Container.Current.Register<IMeetingRepository, MeetingRepository>().WithLifetimeManager(new ContainerLifetime());
+            
         }
 
         private void InitializeSettingTable()
