@@ -3,6 +3,7 @@ using Intersoft.Crosslight.Input;
 using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
 using Receiptionist.Core.ModelServices;
+using Receiptionist.Core.ModelServices.Infrastructure;
 using Receiptionist.Infrastructure;
 using Receiptionist.ViewModels;
 using System;
@@ -21,9 +22,10 @@ namespace Receiptionist.Core.ViewModels
             this.Timer = new Timer(this.CheckData, 0, 0, 1000);
             this.CountDown = 30;
             this.UpdateCountDownText();
+            Meeting = new Meeting();
         }
         #endregion
-        
+
         #region Fields
         private string _closeText;
         #endregion
@@ -42,12 +44,18 @@ namespace Receiptionist.Core.ViewModels
                 }
             }
         }
+        public Meeting Meeting { get; set; }
         public Timer Timer { get; set; }
         public DelegateCommand CloseCommand { get; set; }
         public DelegateCommand NotifyCommand { get; set; }
         public AppViewModel AppViewModel
         {
             get { return Container.Current.Resolve<AppViewModel>(); }
+        }
+
+        public IMeetingRepository MeetingRepository
+        {
+            get { return Container.Current.Resolve<IMeetingRepository>(); }
         }
 
         #endregion
@@ -79,29 +87,24 @@ namespace Receiptionist.Core.ViewModels
 
         public override void Navigated(NavigatedParameter parameter)
         {
-
-            Meeting meetinggg = new Meeting();
-            meetinggg = this.Item;
-
             try
             {
                 base.Navigated(parameter);
-                Meeting meeting = new Meeting();
 
-                meeting = parameter.Data as Meeting;
+                Meeting = AppViewModel.Meeting;
 
                 var employee = new StringBuilder();
                 var visitor = new StringBuilder();
 
-                foreach (var meetingin in meeting.Employees)
+                foreach (var meetingin in Meeting.Employees)
                 {
 
                     employee.Append(meetingin.Name + " ");
                     employee.AppendLine();
                 }
 
-                meeting.NameEmployee = employee.ToString();
-                foreach (var visitoring in meeting.Visitors)
+                Meeting.NameEmployee = employee.ToString();
+                foreach (var visitoring in Meeting.Visitors)
 
                 {
                     visitor.Append(visitoring.Name + "(");
@@ -109,10 +112,9 @@ namespace Receiptionist.Core.ViewModels
                     visitor.AppendLine();
                 }
 
-                meeting.NameVisitor = visitor.ToString();
-                this.Item = meeting;
-
-                //  this.ExecuteNotify(null);
+                Meeting.NameVisitor = visitor.ToString();
+                this.Item = Meeting;
+                
                 this.NotifyEmail(null);
             }
 
@@ -134,36 +136,15 @@ namespace Receiptionist.Core.ViewModels
             this.NavigationService.Close();
         }
 
-        public async void ExecuteNotify(object parameter)
-        {
-            RepositoryBase<Meeting> repository = new RepositoryBase<Meeting>();
-
-            Meeting meetingin = await repository.NotifyAsync(this.Item);
-
-
-            foreach (var employee in meetingin.Employees)
-            {
-                this.ToastPresenter.Show(employee.Name + " already notified");
-            }
-
-        }
-
+       
         public async void NotifyEmail(object parameter)
         {
-
-            RepositoryBase<Meeting> repository = new RepositoryBase<Meeting>();
-            Meeting meetingin = await repository.NotifyEmailAsync(this.Item);
-
+            Meeting meetingin = await MeetingRepository.NotifyEmailAsync(this.Item);
             foreach (var employee in meetingin.Employees)
             {
                 this.ToastPresenter.Show(employee.Name + " already notified");
             }
-
         }
         #endregion
-
-
-      
-
     }
 }

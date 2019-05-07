@@ -3,18 +3,21 @@ using Intersoft.Crosslight.Input;
 using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
 using Receiptionist.Core.ModelServices;
+using Receiptionist.Core.ModelServices.Infrastructure;
 using Receiptionist.Core.ViewModels;
+using Receiptionist.Infrastructure;
 using System;
 
 namespace Receiptionist.ViewModels
 {
-    public class InputViewModel :ViewModelBase 
+    public class InputViewModel : ViewModelBase
     {
 
         #region Constructors
         public InputViewModel()
         {
             this.SearchCommand = new DelegateCommand(ExecuteScan);
+            this.Meeting = new Meeting();
         }
 
         #endregion
@@ -24,6 +27,17 @@ namespace Receiptionist.ViewModels
         public DelegateCommand SearchCommand { get; set; }
         public string SearchPin { get; set; }
         public string SearchKey { get; set; }
+        public Meeting Meeting { get; set; }
+
+        //public IVisitorRepository VisitorRepository
+        //{
+        //    get { return Container.Current.Resolve<IVisitorRepository>(); }
+        //}
+
+        public AppViewModel AppViewModel
+        {
+            get { return Container.Current.Resolve<AppViewModel>(); }
+        }
 
         #endregion
 
@@ -31,12 +45,6 @@ namespace Receiptionist.ViewModels
 
         protected async void ExecuteScan(object parameter)
         {
-            Meeting Meeting = new Meeting
-            {
-                MeetingPin = this.SearchPin,
-                MeetingKey = this.SearchKey
-            };
-            
             try
             {
                 if (string.IsNullOrEmpty(this.SearchPin) && string.IsNullOrEmpty(this.SearchKey))
@@ -56,6 +64,9 @@ namespace Receiptionist.ViewModels
 
                 else if (!string.IsNullOrEmpty(this.SearchPin) && !string.IsNullOrEmpty(this.SearchKey))
                 {
+                    Meeting.MeetingPin = this.SearchPin;
+                    Meeting.MeetingKey = this.SearchKey;
+                    
                     Meeting Meetingin = await this.MeetingRepository.GetMeetingAsync(Meeting);
                     if (Meetingin == null)
                     {
@@ -63,7 +74,8 @@ namespace Receiptionist.ViewModels
                     }
                     else
                     {
-                        this.NavigationService.Navigate<MeetingDetailViewModel>(new NavigationParameter() { Data = Meetingin });
+                        AppViewModel.Meeting = Meetingin;
+                        this.NavigationService.Navigate<MeetingDetailViewModel>(new NavigationParameter() );
                     }
                 }
             }

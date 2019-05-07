@@ -1,21 +1,20 @@
 ﻿using Intersoft.Crosslight.Data.ComponentModel;
 using Receiptionist.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Receiptionist.Core.Models
 {
     public class GeneralSetting : ModelBase
     {
-        #region fields
+        #region Fields
+
         private string _generalName;
         private Guid _settingId;
         private string _generalNameJson;
 
         #endregion
+
+        #region Properties
 
         [PrimaryKey]
         public Guid SettingId
@@ -57,6 +56,7 @@ namespace Receiptionist.Core.Models
             }
         }
 
+        #endregion
 
     }
 }

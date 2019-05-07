@@ -15,10 +15,6 @@ namespace Receiptionist.Core.ViewModels
         }
         #endregion
 
-        #region Fields
-        
-        #endregion
-
         #region Properties
         public Meeting Meeting { get; set; }
 
@@ -28,17 +24,21 @@ namespace Receiptionist.Core.ViewModels
 
         #region Methods
 
-        public async Task<Meeting> CreateMeeting (Meeting meeting)
+        public void NewMeeting()
         {
-            Meeting = await this.MeetingRepository.InsertAsync(meeting);
-            return Meeting;
+            this.Meeting = new Meeting
+            {
+                Employees = new List<Employee>(),
+                Visitors = new List<Visitor>()
+            };
+
         }
 
-        //public void CreateNewMeeting()
-        //{
-        //    Meeting.Visitors = new List<Visitor>();
-        //    Meeting.Employees = new List<Employee>();
-        //}
+        public async Task SaveMeeting(Meeting meeting)
+        {
+            await this.MeetingRepository.InsertAsync(meeting);
+        }
+
         #endregion
     }
 }

@@ -11,6 +11,7 @@ namespace Receiptionist.ModelServices
         Task<T> GetVisitorAsync(T entity);
         Task<T> GetEmployeeAsync(T entity);
         Task<T> GetMeetingAsync(T entity);
-
+        Task<T> NotifyEmailAsync(T entity);
+        
     }
 }

@@ -2,12 +2,10 @@
 using Intersoft.Crosslight.Input;
 using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
-using Receiptionist.Core.ModelServices;
 using Receiptionist.Core.ModelServices.Infrastructure;
 using Receiptionist.Core.ViewModels;
 using Receiptionist.Infrastructure;
 using System;
-using System.Collections.Generic;
 
 namespace Receiptionist.ViewModels
 {
@@ -18,9 +16,7 @@ namespace Receiptionist.ViewModels
         public SearchPhoneViewModel()
         {
             this.PhoneCommand = new DelegateCommand(ExecutePhoneVisitor);
-           
         }
-
         #endregion
 
         #region Properties
@@ -49,30 +45,26 @@ namespace Receiptionist.ViewModels
         {
             try
             {
-                
+                AppViewModel.Meeting.Visitors.Clear();
                 if (string.IsNullOrEmpty(this.SearchPhone))
                 {
                     this.MessagePresenter.Show("Masukan nomor handphone");
                 }
-
                 else
                 {
-
-                    Visitor visitor = new Visitor
-                    {
-                        Phone = this.SearchPhone
-                    };
-                    Visitor visitors = await this.VisitorRepository.GetVisitorAsync(visitor);
+                    this.Visitor.Phone = this.SearchPhone;
+                    this.Visitor = await this.VisitorRepository.GetVisitorAsync(this.Visitor);
                     
-                    if (visitors.Name == null)
+                    if (string.IsNullOrEmpty(this.Visitor.Name))
                     {
                         this.NavigationService.Navigate<RegisterViewModel>(new NavigationParameter());
-                        AppViewModel.Meeting.Visitors.Add(visitor);
+                        this.Visitor.Phone = this.SearchPhone;
+                        AppViewModel.Meeting.Visitors.Add(this.Visitor);
                     }
                     else
                     {
                         this.NavigationService.Navigate<PurposeViewModel>(new NavigationParameter());
-                        AppViewModel.Meeting.Visitors.Add(visitors);
+                        AppViewModel.Meeting.Visitors.Add(this.Visitor);
                     }
                 }
             }
@@ -85,9 +77,7 @@ namespace Receiptionist.ViewModels
         public  override void Navigated(NavigatedParameter parameter)
         {
             base.Navigated(parameter);
-
             this.Visitor = new Visitor();
-            this.AppViewModel.Meeting.Visitors.Add(this.Visitor);
         }
 
         #endregion

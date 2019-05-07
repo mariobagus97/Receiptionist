@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Intersoft.Crosslight.Forms;
+﻿using Intersoft.Crosslight.Data.ComponentModel;
 using Receiptionist.Models;
-using Intersoft.Crosslight.Data.ComponentModel;
+using System;
 using System.Runtime.Serialization;
 
 namespace Receiptionist.Core.Models
@@ -13,11 +8,13 @@ namespace Receiptionist.Core.Models
     [DataContract]
     public class Setting : ModelBase
     {
+        #region Fields
+        
+        private string _generalName;
+        private bool _hasBarcode;
         private Guid _settingId;
 
-         private string _generalName;
-
-        private bool _hasBarcode;
+        #endregion
 
         [PrimaryKey]
         public Guid SettingId
@@ -45,7 +42,7 @@ namespace Receiptionist.Core.Models
                 }
             }
         }
-        
+
 
         public bool HasBarcode
         {
@@ -59,10 +56,6 @@ namespace Receiptionist.Core.Models
                 }
             }
         }
-
-
-
-
     }
 }
 

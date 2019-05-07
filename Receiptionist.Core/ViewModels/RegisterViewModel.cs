@@ -81,15 +81,13 @@ namespace Receiptionist.ViewModels
 
                 else
                 {
-                    Visitor visitor = new Visitor
-                    {
-                        Name = this.NameText,
-                        Email = this.EmailText,
-                        Phone = this.PhoneText,
-                        Company = this.CompanyText
-                    };
+                    this.Item.Name = this.NameText;
+                    this.Item.Email = this.EmailText;
+                    this.Item.Phone = this.PhoneText;
+                    this.Item.Company = this.CompanyText;
+                    
                     AppViewModel.Meeting.Visitors = new List<Visitor>();
-                    AppViewModel.Meeting.Visitors.Add(visitor);
+                    AppViewModel.Meeting.Visitors.Add(this.Item);
                     this.NavigationService.Navigate<PurposeViewModel>(new NavigationParameter());
                 }
             }
@@ -104,11 +102,13 @@ namespace Receiptionist.ViewModels
         public override void Navigated(NavigatedParameter parameter)
         {
             base.Navigated(parameter);
-            Visitor visitor = parameter.Data as Visitor;
-            if (visitor != null)
+            this.Item = new Visitor();
+            foreach ( var visitors in AppViewModel.Meeting.Visitors)
             {
-                this.PhoneText = visitor.Phone;
+                this.PhoneText = visitors.Phone;
             }
+
+
         }
 
         protected override void OnPropertyChanged(string propertyName)

@@ -78,5 +78,11 @@ namespace Receiptionist.Core.ModelServices.Local
         {
             return null;
         }
+
+        public virtual Task<T> NotifyEmailAsync(T entity)
+        {
+            return null;
+        }
+        
     }
 }

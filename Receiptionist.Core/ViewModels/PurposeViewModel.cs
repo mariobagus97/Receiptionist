@@ -24,7 +24,6 @@ namespace Receiptionist.ViewModels
         public DelegateCommand VisitingCommand { get; set; }
         public DelegateCommand DeliveryCommand { get; set; }
         public DelegateCommand MeetingCommand { get; set; }
-        public Meeting Meeting { get; set; }
         public AppViewModel AppViewModel
         {
             get { return Container.Current.Resolve<AppViewModel>(); }

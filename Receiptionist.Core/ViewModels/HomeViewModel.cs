@@ -10,6 +10,7 @@ namespace Receiptionist.ViewModels
     public class HomeViewModel : ViewModelBase
     {
         #region Constructors
+
         public  HomeViewModel()
         {
             this.MeetingCommand = new DelegateCommand(ExecuteMeeting);
@@ -18,6 +19,7 @@ namespace Receiptionist.ViewModels
         #endregion
 
         #region Properties
+
         public GeneralSetting GeneralSetting
         {
             get { return Container.Current.Resolve<GeneralSetting>(); }
@@ -28,34 +30,27 @@ namespace Receiptionist.ViewModels
         #endregion
 
         #region Methods
-        
+
         public void ExecuteMeeting(object parameter)
         {
-            Setting setting = new Setting();
+            Setting setting = null;
 
-            if (GeneralSetting.GeneralNameJson != null)
-            {
+            if (!string.IsNullOrEmpty(this.GeneralSetting.GeneralNameJson))
                 setting = SimpleJson.DeserializeObject<Setting>(GeneralSetting.GeneralNameJson);
-            }
             else
-            {
-                setting.HasBarcode = false;
-            }
+                setting = new Setting();
 
-            if (setting == null || setting.HasBarcode == true  )
-            {
+            if (setting.HasBarcode)
                 this.NavigationService.Navigate<IntroViewModel>(new NavigationParameter());
-            }
-            else if (setting.HasBarcode == false )
-            {
+            else
                 this.NavigationService.Navigate<SearchPhoneViewModel>(new NavigationParameter());
-            }
         }
 
         public void ExecuteSetting(object parameter)
         {
             this.NavigationService.Navigate<SettingViewModel>(new NavigationParameter());
         }
+
         #endregion
     }
 }

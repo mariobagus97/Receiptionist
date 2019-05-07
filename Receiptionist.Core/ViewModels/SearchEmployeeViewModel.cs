@@ -6,7 +6,6 @@ using Receiptionist.Core.ModelServices.Infrastructure;
 using Receiptionist.Core.ViewModels;
 using Receiptionist.Infrastructure;
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Receiptionist.ViewModels
@@ -27,6 +26,7 @@ namespace Receiptionist.ViewModels
         public DelegateCommand SearchEmployeeCommand { get; set; }
         public DelegateCommand DoneCommand { get; set; }
         public string SearchEmployee { get; set; }
+        public Employee Employee { get; set; }
 
         public AppViewModel AppViewModel
         {
@@ -40,43 +40,11 @@ namespace Receiptionist.ViewModels
 
         #endregion
 
-        public async void ExecuteDone(object parameter)
-        {
-            try
-            {
-                Meeting Meeting = new Meeting();
-                Meeting = this.Item;
-                
-                if (Meeting.NameEmployee != null)
-                {
-                    await AppViewModel.CreateMeeting(Meeting);
-                    this.Item = AppViewModel.Meeting;
-                    this.NavigationService.Navigate<MeetingDetailViewModel>(new NavigationParameter() { Data = this.Item });
-                }
-                else
-                {
-                    this.MessagePresenter.Show("Cari dan pilih nama karyawan");
-                }
-            }
-            catch (Exception ex)
-            {
-                this.MessagePresenter.Show(ex.Message);
-            }
-        }
-
+        
 
         public async void ExecuteSearchEmployee(object parameter)
         {
-            //Meeting meeting = new Meeting();
-            //meeting = this.Item;
-
-           // meeting.Employees = new List<Employee>();
-            Employee employee = new Employee();
-            employee.Name = this.SearchEmployee;
-
-            AppViewModel.Meeting.Employees.Add(employee);
-            //meeting.Employees.Add(employee);
-
+           AppViewModel.Meeting.Employees.Clear();
            if (string.IsNullOrEmpty(this.SearchEmployee))
             {
                 this.MessagePresenter.Show("Masukan email karyawan");
@@ -85,29 +53,34 @@ namespace Receiptionist.ViewModels
             {
                 try
                 {
+                    this.Employee.Name = this.SearchEmployee;
+
+                    AppViewModel.Meeting.Employees.Add(this.Employee);
+
                     this.ToastPresenter.Show("Waiting...");
 
-                    Meeting meetingin = await this.MeetingRepository.GetEmployeeAsync(AppViewModel.Meeting);
+                    this.Item = await this.MeetingRepository.GetEmployeeAsync(AppViewModel.Meeting);
                     
-                    if (meetingin.Employees.Count == 0)
+                    if (this.Item.Employees.Count == 0)
                     {
                         this.MessagePresenter.Show("Karyawan tidak ditemukan");
                     }
-
                     else
                     {
                         var employeee = new StringBuilder();
 
-                        foreach (var meetingins in meetingin.Employees)
+                        foreach (var meetings in this.Item.Employees)
                         {
-                            employeee.Append(meetingins.Name);
+                            employeee.Append(meetings.Name);
                             employeee.AppendLine();
                         }
 
-                        meetingin.NameEmployee = employeee.ToString();
-                        
-                        NavigationParameter parameters = new NavigationParameter();
-                        parameters.Data = meetingin;
+                        this.Item.NameEmployee = employeee.ToString();
+
+                        NavigationParameter parameters = new NavigationParameter
+                        {
+                            Data = this.Item
+                        };
 
                         DialogOptions dialogOptions = new DialogOptions();
                         
@@ -129,14 +102,10 @@ namespace Receiptionist.ViewModels
                             {
                                 if (viewModel.SelectedItem != null)
                                 { 
-                                Employee employees = new Employee();
-                                employees = viewModel.SelectedItem;
-
-                                
-                                    meetingin.Employees.Clear();
-                                    meetingin.Employees.Add(employees);
-
-                                    this.Item = meetingin;
+                                    this.Employee = viewModel.SelectedItem;
+                                    
+                                    this.Item.Employees.Clear();
+                                    this.Item.Employees.Add(this.Employee);
                                     this.ExecuteDone(null);
                                 }
                                 else
@@ -146,8 +115,7 @@ namespace Receiptionist.ViewModels
                             }
                             else
                             {
-                                meetingin = new Meeting();
-                                this.Item = meetingin;
+                                this.Item = new Meeting();
                                 this.ToastPresenter.Show("Anda belum memilih karyawan");
                             }
                             
@@ -161,11 +129,33 @@ namespace Receiptionist.ViewModels
             }
         }
 
-        public  override void Navigated(NavigatedParameter parameter)
+        public async void ExecuteDone(object parameter)
+        {
+            try
+            {
+                if (this.Item.NameEmployee != null)
+                {
+                    await AppViewModel.SaveMeeting(this.Item);
+                    this.Item = AppViewModel.Meeting;
+                    this.NavigationService.Navigate<MeetingDetailViewModel>(new NavigationParameter());
+                }
+                else
+                {
+                    this.MessagePresenter.Show("Cari dan pilih nama karyawan");
+                }
+            }
+            catch (Exception ex)
+            {
+                this.MessagePresenter.Show(ex.Message);
+            }
+        }
+
+
+        public override void Navigated(NavigatedParameter parameter)
         {
             base.Navigated(parameter);
-            //Meeting meeting = parameter.Data as Meeting;
-            //this.Item = meeting;
+            this.Employee = new Employee();
+            this.Item = new Meeting();
         }
         
     }
