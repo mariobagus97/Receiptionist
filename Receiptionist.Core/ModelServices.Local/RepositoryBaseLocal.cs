@@ -1,6 +1,7 @@
 ﻿using Intersoft.Crosslight;
 using Intersoft.Crosslight.Data.SQLite;
 using Intersoft.Crosslight.Mobile;
+using Receiptionist.Core.ModelServices.Infrastructure;
 using Receiptionist.ModelServices;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Receiptionist.Core.ModelServices.Local
 {
-    public class RepositoryBaseLocal <T> : IRepository<T> where T : class , new()
+    public class RepositoryBaseLocal <T> : IEditableRepository<T> where T : class , new()
     {
         #region Constructors
 
@@ -39,6 +40,7 @@ namespace Receiptionist.Core.ModelServices.Local
             return db;
 
         }
+        
 
         public virtual async Task<T> InsertAsync(T entity)
         {
@@ -46,6 +48,7 @@ namespace Receiptionist.Core.ModelServices.Local
             return null;
         }
 
+        
         public virtual async Task<IList<T>> GetAllAsync()
         {
             IList<T> items = await this.Db.Table<T>().ToListAsync();
@@ -58,31 +61,16 @@ namespace Receiptionist.Core.ModelServices.Local
             return null;
         }
 
+        public virtual async Task<T> DeleteAsync(T entity)
+        {
+            await this.Db.DeleteAsync(entity);
+            return null;
+        }
+
         public virtual async Task<T> GetSingleAsync()
         {
             T items = await this.Db.Table<T>().FirstOrDefaultAsync();
             return items;
         }
-
-        public virtual  Task<T> GetVisitorAsync(T entity)
-        {
-            return null;
-        }
-
-        public virtual Task<T> GetEmployeeAsync(T entity)
-        {
-            return null;
-        }
-
-        public virtual Task<T> GetMeetingAsync(T entity)
-        {
-            return null;
-        }
-
-        public virtual Task<T> NotifyEmailAsync(T entity)
-        {
-            return null;
-        }
-        
     }
 }

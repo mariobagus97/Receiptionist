@@ -1,18 +1,17 @@
 ﻿using Intersoft.Crosslight;
 using Intersoft.Crosslight.RestClient;
-using Receiptionist.ModelServices;
 using System.Threading.Tasks;
 
 
 namespace Receiptionist.Core.ModelServices
 {
-    public class RepositoryBase<T> : IRepository<T> where T : class , new()
+    public class RepositoryBase<T>  where T : class , new()
     {
 
         #region Fields
 
-       // private string baseUrl = "http://192.168.1.56:58360";
-        private string baseUrl = "http://192.168.8.100:58360";
+        //private string baseUrl = "http://192.168.1.56:58360";
+        private string baseUrl = "http://192.168.8.101:58360";
         //private string baseUrl = "http://webreciptionistnew-test.ap-southeast-1.elasticbeanstalk.com";
 
         #endregion
@@ -80,20 +79,20 @@ namespace Receiptionist.Core.ModelServices
         }
         
 
-        public virtual async Task<T> NotifyAsync(T entity)
-        {
-            IRestClient client = new RestClient(baseUrl);
+        //public virtual async Task<T> NotifyAsync(T entity)
+        //{
+        //    IRestClient client = new RestClient(baseUrl);
 
-            IRestRequest postRequest = new RestRequest("data/SelfKios/NotifyEmployee", HttpMethod.POST);
-            postRequest.RequestFormat = RequestDataFormat.Json;
+        //    IRestRequest postRequest = new RestRequest("data/SelfKios/NotifyEmployee", HttpMethod.POST);
+        //    postRequest.RequestFormat = RequestDataFormat.Json;
 
-            postRequest.AddBody(entity);
-            IRestResponse postResponse = await client.ExecuteAsync(postRequest);
+        //    postRequest.AddBody(entity);
+        //    IRestResponse postResponse = await client.ExecuteAsync(postRequest);
 
-            T data = SimpleJson.DeserializeObject<T>(postResponse.Content);
+        //    T data = SimpleJson.DeserializeObject<T>(postResponse.Content);
 
-            return data;
-        }
+        //    return data;
+        //}
 
         public virtual async Task<T> NotifyEmailAsync(T entity)
         {
@@ -109,16 +108,7 @@ namespace Receiptionist.Core.ModelServices
 
             return data;
         }
-
-        public virtual  Task<T> UpdateAsync(T entity)
-        {
-            return null;
-        }
-
-         public virtual  Task<T> GetSingleAsync()
-        {
-            return null;
-        }
+        
 
         #endregion
     }

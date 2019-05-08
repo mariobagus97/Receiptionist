@@ -31,33 +31,31 @@ namespace Receiptionist.Infrastructure
             base.OnStart(parameter);
             this.InitializeSettingTable();
             this.Initialize();
-            this.InitializeSetting();
+           // this.InitializeSetting();
             this.InitializeRepositories();
 
             this.SetRootViewModel<HomeViewModel>();
         }
 
-        private void Initialize()
+        private async void Initialize()
         {
-            AppViewModel appViewModel = new AppViewModel
+            GeneralSettingRepository generalSettingRepository = new GeneralSettingRepository();
+
+            AppViewModel appViewModel = new AppViewModel();
+            appViewModel.Meeting = new Meeting
             {
-                Meeting = new Meeting
-                {
-                    Visitors = new List<Visitor>(),
-                    Employees = new List<Employee>()
-                }
+                Employees = new List<Employee>(),
+                Visitors = new List<Visitor>()
             };
+            appViewModel.GeneralSetting = await generalSettingRepository.GetSingleAsync();
+
+            if (!string.IsNullOrEmpty(appViewModel.GeneralSetting.GeneralNameJson))
+                appViewModel.Setting = SimpleJson.DeserializeObject<Setting>(appViewModel.GeneralSetting.GeneralNameJson);
+            else
+                appViewModel.Setting = new Setting();
             Container.Current.RegisterInstance(appViewModel);
         }
         
-
-        private async void InitializeSetting()
-        {
-            GeneralSettingRepository generalSettingRepository = new GeneralSettingRepository();
-            GeneralSetting generalsetting = await generalSettingRepository.GetSingleAsync();
-            Container.Current.RegisterInstance(generalsetting);
-        }
-
         private void InitializeRepositories()
         {
             Container.Current.Register<IVisitorRepository, VisitorRepository>().WithLifetimeManager(new ContainerLifetime());

@@ -18,7 +18,11 @@ namespace Receiptionist.Core.ViewModels
         #region Properties
         public Meeting Meeting { get; set; }
 
+        public GeneralSetting GeneralSetting { get; set; }
+        public Setting Setting { get; set; }
+
         private MeetingRepository MeetingRepository;
+
         #endregion
 
 
@@ -30,8 +34,7 @@ namespace Receiptionist.Core.ViewModels
             {
                 Employees = new List<Employee>(),
                 Visitors = new List<Visitor>()
-            };
-
+            }; 
         }
 
         public async Task SaveMeeting(Meeting meeting)

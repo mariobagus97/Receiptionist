@@ -1,9 +1,10 @@
 ﻿using Receiptionist.Core.Models;
 using Receiptionist.Core.ModelServices.Infrastructure;
+using Receiptionist.Core.ModelServices.Local;
 
 namespace Receiptionist.Core.ModelServices
 {
-    public class VisitorRepository : RepositoryBase<Visitor> , IVisitorRepository
+    public class EmployeeRepository : RepositoryBaseLocal<Employee> , IEmployeeRepository
     { 
     }
 }

@@ -2,6 +2,7 @@
 using Intersoft.Crosslight.Input;
 using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
+using Receiptionist.Core.ModelServices;
 using Receiptionist.Core.ModelServices.Infrastructure;
 using Receiptionist.Core.ViewModels;
 using Receiptionist.Infrastructure;
@@ -53,7 +54,9 @@ namespace Receiptionist.ViewModels
                 else
                 {
                     this.Visitor.Phone = this.SearchPhone;
-                    this.Visitor = await this.VisitorRepository.GetVisitorAsync(this.Visitor);
+
+                    RepositoryBase<Visitor> RepositoryVisitor = new RepositoryBase<Visitor>();
+                    this.Visitor = await RepositoryVisitor.GetVisitorAsync(this.Visitor);
                     
                     if (string.IsNullOrEmpty(this.Visitor.Name))
                     {

@@ -19,9 +19,10 @@ namespace Receiptionist.Core.ViewModels
 
         #region Properties
         
-        public GeneralSetting GeneralSetting
+
+        public AppViewModel AppViewModel
         {
-            get { return Container.Current.Resolve<GeneralSetting>(); }
+            get { return Container.Current.Resolve<AppViewModel>(); }
         }
 
         public IGeneralSettingRepository GeneralSettingRepository
@@ -43,25 +44,21 @@ namespace Receiptionist.Core.ViewModels
         
         protected async override void ExecuteSave(object parameter)
         {
-            string data = SimpleJson.SerializeObject(this.Item);
-
-            GeneralSetting.GeneralNameJson = data;
-
-            await GeneralSettingRepository.UpdateAsync(GeneralSetting);
+            AppViewModel.GeneralSetting.GeneralNameJson = SimpleJson.SerializeObject(this.Item);
+            await GeneralSettingRepository.UpdateAsync(AppViewModel.GeneralSetting);
+            AppViewModel.Setting = this.Item;
             base.ExecuteSave(parameter);
         }
         
         public  override void Navigated(NavigatedParameter parameter)
         {
             this.Item = new Setting();
-            if (GeneralSetting.GeneralNameJson != null)
-            {
-                this.Item = SimpleJson.DeserializeObject<Setting>(GeneralSetting.GeneralNameJson);
-            }
+            if (!string.IsNullOrEmpty(AppViewModel.Setting.GeneralName))
+                this.Item = AppViewModel.Setting;
             else
             {
-                this.Item.GeneralName = GeneralSetting.GeneralName;
-                this.Item.SettingId = GeneralSetting.SettingId;
+                this.Item.GeneralName = AppViewModel.GeneralSetting.GeneralName;
+                this.Item.SettingId = AppViewModel.GeneralSetting.SettingId;
             }
             base.Navigated(parameter);
         }

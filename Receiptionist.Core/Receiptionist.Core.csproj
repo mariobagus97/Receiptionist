@@ -48,6 +48,7 @@
     <Compile Include="FormMetaData\VisitorFormMetaData.cs" />
     <Compile Include="Infrastructure\AppService.cs" />
     <Compile Include="Infrastructure\Container.cs" />
+    <Compile Include="ModelServices.Infrastructure\IEditableRepository.cs" />
     <Compile Include="ModelServices.Infrastructure\IEmployeeRepository.cs" />
     <Compile Include="ModelServices.Infrastructure\IGeneralSettingRepository.cs" />
     <Compile Include="ModelServices.Infrastructure\IMeetingRepository.cs" />
@@ -55,10 +56,9 @@
     <Compile Include="ModelServices.Infrastructure\IVisitorRepository.cs" />
     <Compile Include="ModelServices.Local\GeneralSettingRepository.cs" />
     <Compile Include="ModelServices.Local\RepositoryBaseLocal.cs" />
-    <Compile Include="ModelServices.WebApi\VisitorRepository.cs" />
-    <Compile Include="ModelServices.WebApi\GetEmployeeRequestData.cs" />
-    <Compile Include="ModelServices.WebApi\MeetingRepository.cs" />
-    <Compile Include="ModelServices.WebApi\EmployeeRepository.cs" />
+    <Compile Include="ModelServices.Local\VisitorRepository.cs" />
+    <Compile Include="ModelServices.Local\MeetingRepository.cs" />
+    <Compile Include="ModelServices.Local\EmployeeRepository.cs" />
     <Compile Include="ModelServices.WebApi\RepositoryBase.cs" />
     <Compile Include="Models\EmailValidation.cs" />
     <Compile Include="Models\Employee.cs" />

@@ -1,7 +1,6 @@
 ﻿using Intersoft.Crosslight;
 using Intersoft.Crosslight.Input;
 using Intersoft.Crosslight.ViewModels;
-using Receiptionist.Core.Models;
 using Receiptionist.Core.ViewModels;
 using Receiptionist.Infrastructure;
 
@@ -20,9 +19,9 @@ namespace Receiptionist.ViewModels
 
         #region Properties
 
-        public GeneralSetting GeneralSetting
+        public AppViewModel AppViewModel
         {
-            get { return Container.Current.Resolve<GeneralSetting>(); }
+            get { return Container.Current.Resolve<AppViewModel>(); }
         }
         public DelegateCommand MeetingCommand { get; set; }
         public DelegateCommand SettingCommand { get; set; }
@@ -33,14 +32,7 @@ namespace Receiptionist.ViewModels
 
         public void ExecuteMeeting(object parameter)
         {
-            Setting setting = null;
-
-            if (!string.IsNullOrEmpty(this.GeneralSetting.GeneralNameJson))
-                setting = SimpleJson.DeserializeObject<Setting>(GeneralSetting.GeneralNameJson);
-            else
-                setting = new Setting();
-
-            if (setting.HasBarcode)
+            if (this.AppViewModel.Setting.HasBarcode)
                 this.NavigationService.Navigate<IntroViewModel>(new NavigationParameter());
             else
                 this.NavigationService.Navigate<SearchPhoneViewModel>(new NavigationParameter());

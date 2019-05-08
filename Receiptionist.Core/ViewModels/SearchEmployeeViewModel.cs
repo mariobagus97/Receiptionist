@@ -2,6 +2,7 @@
 using Intersoft.Crosslight.Input;
 using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
+using Receiptionist.Core.ModelServices;
 using Receiptionist.Core.ModelServices.Infrastructure;
 using Receiptionist.Core.ViewModels;
 using Receiptionist.Infrastructure;
@@ -33,10 +34,10 @@ namespace Receiptionist.ViewModels
             get { return Container.Current.Resolve<AppViewModel>(); }
         }
 
-        public IMeetingRepository MeetingRepository
-        {
-            get { return Container.Current.Resolve<IMeetingRepository>(); }
-        }
+        //public IMeetingRepository MeetingRepository
+        //{
+        //    get { return Container.Current.Resolve<IMeetingRepository>(); }
+        //}
 
         #endregion
 
@@ -59,7 +60,9 @@ namespace Receiptionist.ViewModels
 
                     this.ToastPresenter.Show("Waiting...");
 
-                    this.Item = await this.MeetingRepository.GetEmployeeAsync(AppViewModel.Meeting);
+                    RepositoryBase<Meeting> RepositoryMeeting = new RepositoryBase<Meeting>();
+
+                    this.Item = await RepositoryMeeting.GetEmployeeAsync(AppViewModel.Meeting);
                     
                     if (this.Item.Employees.Count == 0)
                     {

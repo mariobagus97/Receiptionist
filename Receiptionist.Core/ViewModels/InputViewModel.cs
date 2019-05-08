@@ -12,7 +12,6 @@ namespace Receiptionist.ViewModels
 {
     public class InputViewModel : ViewModelBase
     {
-
         #region Constructors
         public InputViewModel()
         {
@@ -28,11 +27,7 @@ namespace Receiptionist.ViewModels
         public string SearchPin { get; set; }
         public string SearchKey { get; set; }
         public Meeting Meeting { get; set; }
-
-        //public IVisitorRepository VisitorRepository
-        //{
-        //    get { return Container.Current.Resolve<IVisitorRepository>(); }
-        //}
+        
 
         public AppViewModel AppViewModel
         {
@@ -66,8 +61,10 @@ namespace Receiptionist.ViewModels
                 {
                     Meeting.MeetingPin = this.SearchPin;
                     Meeting.MeetingKey = this.SearchKey;
-                    
-                    Meeting Meetingin = await this.MeetingRepository.GetMeetingAsync(Meeting);
+
+                    RepositoryBase<Meeting> RepositoryMeeting = new RepositoryBase<Meeting>();
+
+                    Meeting Meetingin = await RepositoryMeeting.GetMeetingAsync(Meeting);
                     if (Meetingin == null)
                     {
                         this.MessagePresenter.Show("Data tidak ditemukan");

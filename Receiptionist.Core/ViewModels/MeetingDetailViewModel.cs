@@ -126,12 +126,7 @@ namespace Receiptionist.Core.ViewModels
 
         public void ExecuteClose(object parameter)
         {
-            AppViewModel.Meeting = new Meeting
-            {
-                Employees = new List<Employee>(),
-                Visitors = new List<Visitor>()
-            };
-
+            AppViewModel.NewMeeting();
             this.NavigationService.Navigate<HomeViewModel>(new NavigationParameter());
             this.NavigationService.Close();
         }
@@ -139,7 +134,8 @@ namespace Receiptionist.Core.ViewModels
        
         public async void NotifyEmail(object parameter)
         {
-            Meeting meetingin = await MeetingRepository.NotifyEmailAsync(this.Item);
+            RepositoryBase<Meeting> repository = new RepositoryBase<Meeting>();
+            Meeting meetingin = await repository.NotifyEmailAsync(this.Item);
             foreach (var employee in meetingin.Employees)
             {
                 this.ToastPresenter.Show(employee.Name + " already notified");
