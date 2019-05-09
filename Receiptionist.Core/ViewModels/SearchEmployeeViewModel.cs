@@ -33,11 +33,7 @@ namespace Receiptionist.ViewModels
         {
             get { return Container.Current.Resolve<AppViewModel>(); }
         }
-
-        //public IMeetingRepository MeetingRepository
-        //{
-        //    get { return Container.Current.Resolve<IMeetingRepository>(); }
-        //}
+        
 
         #endregion
 

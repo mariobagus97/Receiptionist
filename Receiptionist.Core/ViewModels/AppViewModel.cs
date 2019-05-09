@@ -19,6 +19,7 @@ namespace Receiptionist.Core.ViewModels
         public Meeting Meeting { get; set; }
 
         public GeneralSetting GeneralSetting { get; set; }
+
         public Setting Setting { get; set; }
 
         private MeetingRepository MeetingRepository;

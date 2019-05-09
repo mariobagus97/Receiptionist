@@ -1,7 +1,6 @@
 ﻿using Intersoft.Crosslight;
 using Intersoft.Crosslight.Input;
 using Intersoft.Crosslight.ViewModels;
-using Receiptionist.Core.Models;
 using Receiptionist.Core.ViewModels;
 using Receiptionist.Infrastructure;
 using System;

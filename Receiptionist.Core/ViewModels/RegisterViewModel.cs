@@ -55,6 +55,7 @@ namespace Receiptionist.ViewModels
         {
             try
             {
+                AppViewModel.Meeting.Visitors.Clear();
                 EmailValidation email = new EmailValidation();
                 var emailvalidate = email.ValidateEmail(this.EmailText);
                 
@@ -107,8 +108,6 @@ namespace Receiptionist.ViewModels
             {
                 this.PhoneText = visitors.Phone;
             }
-
-
         }
 
         protected override void OnPropertyChanged(string propertyName)
