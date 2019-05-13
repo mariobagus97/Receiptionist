@@ -11,7 +11,6 @@ namespace Receiptionist.Core.ViewModels
         #region Constructor
         public AppViewModel()
         {
-            MeetingRepository = new MeetingRepository();
         }
         #endregion
 
@@ -21,8 +20,7 @@ namespace Receiptionist.Core.ViewModels
         public GeneralSetting GeneralSetting { get; set; }
 
         public Setting Setting { get; set; }
-
-        private MeetingRepository MeetingRepository;
+        
 
         #endregion
 
@@ -38,9 +36,13 @@ namespace Receiptionist.Core.ViewModels
             }; 
         }
 
-        public async Task SaveMeeting(Meeting meeting)
+        public async Task<Meeting> SaveMeeting(Meeting meeting)
         {
-            await this.MeetingRepository.InsertAsync(meeting);
+            RepositoryBase<Meeting> RepositoryMeeting = new RepositoryBase<Meeting>();
+
+           Meeting meetings = await RepositoryMeeting.InsertAsync(meeting);
+
+            return meetings;
         }
 
         #endregion

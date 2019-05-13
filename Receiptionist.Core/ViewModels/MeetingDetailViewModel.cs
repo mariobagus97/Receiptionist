@@ -129,17 +129,24 @@ namespace Receiptionist.Core.ViewModels
             AppViewModel.NewMeeting();
             this.NavigationService.Navigate<HomeViewModel>(new NavigationParameter());
             this.NavigationService.Close();
+            SearchEmployeeViewModel searchEmployee = new SearchEmployeeViewModel();
+            searchEmployee.NavigationService.Close();
         }
 
        
         public async void NotifyEmail(object parameter)
         {
             RepositoryBase<Meeting> repository = new RepositoryBase<Meeting>();
-            Meeting meetingin = await repository.NotifyEmailAsync(this.Item);
-            foreach (var employee in meetingin.Employees)
+            Meeting meetings = await repository.NotifyEmailAsync(this.Item);
+            if (meetings != null)
             {
-                this.ToastPresenter.Show(employee.Name + " already notified");
+                foreach (var employee in meetings.Employees)
+                {
+                    this.ToastPresenter.Show(employee.Name + " already notified");
+                }
             }
+            else
+                this.ToastPresenter.Show("failed to notify employees");
         }
         #endregion
     }

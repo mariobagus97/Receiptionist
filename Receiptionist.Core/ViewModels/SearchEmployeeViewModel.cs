@@ -134,8 +134,8 @@ namespace Receiptionist.ViewModels
             {
                 if (this.Item.NameEmployee != null)
                 {
-                    await AppViewModel.SaveMeeting(this.Item);
-                    this.Item = AppViewModel.Meeting;
+                    AppViewModel.Meeting = await AppViewModel.SaveMeeting(this.Item);
+                    //this.Item = 
                     this.NavigationService.Navigate<MeetingDetailViewModel>(new NavigationParameter());
                 }
                 else
