@@ -7,7 +7,6 @@ using Receiptionist.Core.ModelServices.Infrastructure;
 using Receiptionist.Infrastructure;
 using Receiptionist.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Receiptionist.Core.ViewModels
@@ -72,15 +71,12 @@ namespace Receiptionist.Core.ViewModels
             this.UpdateCountDownText();
 
             if (this.CountDown == 0)
-            {
                 this.ExecuteClose(null);
-            }
         }
 
         protected override void Dispose(bool isDisposing)
         {
             base.Dispose(isDisposing);
-
             this.Timer.Dispose();
             this.Timer = null;
         }
@@ -96,28 +92,25 @@ namespace Receiptionist.Core.ViewModels
                 var employee = new StringBuilder();
                 var visitor = new StringBuilder();
 
-                foreach (var meetingin in Meeting.Employees)
+                foreach (var meetings in Meeting.Employees)
                 {
-
-                    employee.Append(meetingin.Name + " ");
+                    employee.Append(meetings.Name + " ");
                     employee.AppendLine();
                 }
 
                 Meeting.NameEmployee = employee.ToString();
-                foreach (var visitoring in Meeting.Visitors)
-
+                foreach (var visitors in Meeting.Visitors)
                 {
-                    visitor.Append(visitoring.Name + "(");
-                    visitor.Append(visitoring.Phone + ")");
+                    visitor.Append(visitors.Name + "(");
+                    visitor.Append(visitors.Phone + ")");
                     visitor.AppendLine();
                 }
 
                 Meeting.NameVisitor = visitor.ToString();
                 this.Item = Meeting;
                 
-                this.NotifyEmail(null);
+                this.NotifyEmail();
             }
-
             catch (Exception ex)
             {
                 this.MessagePresenter.Show(ex.Message);
@@ -132,11 +125,10 @@ namespace Receiptionist.Core.ViewModels
             SearchEmployeeViewModel searchEmployee = new SearchEmployeeViewModel();
             searchEmployee.NavigationService.Close();
         }
-
-       
-        public async void NotifyEmail(object parameter)
+        
+        public async void NotifyEmail()
         {
-            RepositoryBase<Meeting> repository = new RepositoryBase<Meeting>();
+            RestRepositoryBase<Meeting> repository = new RestRepositoryBase<Meeting>();
             Meeting meetings = await repository.NotifyEmailAsync(this.Item);
             if (meetings != null)
             {

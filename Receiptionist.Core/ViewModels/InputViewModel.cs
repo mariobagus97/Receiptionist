@@ -62,7 +62,7 @@ namespace Receiptionist.ViewModels
                     Meeting.MeetingPin = this.SearchPin;
                     Meeting.MeetingKey = this.SearchKey;
 
-                    RepositoryBase<Meeting> RepositoryMeeting = new RepositoryBase<Meeting>();
+                    RestRepositoryBase<Meeting> RepositoryMeeting = new RestRepositoryBase<Meeting>();
 
                     Meeting Meetingin = await RepositoryMeeting.GetMeetingAsync(Meeting);
                     if (Meetingin == null)

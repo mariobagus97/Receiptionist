@@ -3,7 +3,6 @@ using Intersoft.Crosslight.Input;
 using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
 using Receiptionist.Core.ModelServices;
-using Receiptionist.Core.ModelServices.Infrastructure;
 using Receiptionist.Core.ViewModels;
 using Receiptionist.Infrastructure;
 using System;
@@ -43,9 +42,7 @@ namespace Receiptionist.ViewModels
         {
            AppViewModel.Meeting.Employees.Clear();
            if (string.IsNullOrEmpty(this.SearchEmployee))
-            {
-                this.MessagePresenter.Show("Masukan email karyawan");
-            }
+               this.MessagePresenter.Show("Masukan email karyawan");
             else
             {
                 try
@@ -56,24 +53,19 @@ namespace Receiptionist.ViewModels
 
                     this.ToastPresenter.Show("Waiting...");
 
-                    RepositoryBase<Meeting> RepositoryMeeting = new RepositoryBase<Meeting>();
-
+                    RestRepositoryBase<Meeting> RepositoryMeeting = new RestRepositoryBase<Meeting>();
                     this.Item = await RepositoryMeeting.GetEmployeeAsync(AppViewModel.Meeting);
                     
                     if (this.Item.Employees.Count == 0)
-                    {
                         this.MessagePresenter.Show("Karyawan tidak ditemukan");
-                    }
                     else
                     {
                         var employeee = new StringBuilder();
-
                         foreach (var meetings in this.Item.Employees)
                         {
                             employeee.Append(meetings.Name);
                             employeee.AppendLine();
                         }
-
                         this.Item.NameEmployee = employeee.ToString();
 
                         NavigationParameter parameters = new NavigationParameter
@@ -135,13 +127,10 @@ namespace Receiptionist.ViewModels
                 if (this.Item.NameEmployee != null)
                 {
                     AppViewModel.Meeting = await AppViewModel.SaveMeeting(this.Item);
-                    //this.Item = 
                     this.NavigationService.Navigate<MeetingDetailViewModel>(new NavigationParameter());
                 }
                 else
-                {
                     this.MessagePresenter.Show("Cari dan pilih nama karyawan");
-                }
             }
             catch (Exception ex)
             {

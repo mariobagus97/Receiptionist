@@ -31,13 +31,10 @@ namespace Receiptionist.ViewModels
         {
             get { return Container.Current.Resolve<AppViewModel>(); }
         }
-
         public DelegateCommand PhoneCommand { get; set; }
-
         public string SearchPhone { get; set; }
-
         public Visitor Visitor { get; set; }
-
+        
         #endregion
 
         #region Method
@@ -48,14 +45,12 @@ namespace Receiptionist.ViewModels
             {
                 AppViewModel.Meeting.Visitors.Clear();
                 if (string.IsNullOrEmpty(this.SearchPhone))
-                {
                     this.MessagePresenter.Show("Masukan nomor handphone");
-                }
                 else
                 {
                     this.Visitor.Phone = this.SearchPhone;
 
-                    RepositoryBase<Visitor> RepositoryVisitor = new RepositoryBase<Visitor>();
+                    RestRepositoryBase<Visitor> RepositoryVisitor = new RestRepositoryBase<Visitor>();
                     this.Visitor = await RepositoryVisitor.GetVisitorAsync(this.Visitor);
                     
                     if (string.IsNullOrEmpty(this.Visitor.Name))

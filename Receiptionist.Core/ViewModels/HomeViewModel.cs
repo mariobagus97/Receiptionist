@@ -23,6 +23,7 @@ namespace Receiptionist.ViewModels
         {
             get { return Container.Current.Resolve<AppViewModel>(); }
         }
+
         public DelegateCommand MeetingCommand { get; set; }
         public DelegateCommand SettingCommand { get; set; }
 

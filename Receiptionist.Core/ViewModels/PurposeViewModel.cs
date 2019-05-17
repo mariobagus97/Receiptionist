@@ -17,8 +17,7 @@ namespace Receiptionist.ViewModels
             this.MeetingCommand = new DelegateCommand(ExecuteMeeting);
         }
         #endregion
-
-
+        
         #region Properties
         public DelegateCommand VisitingCommand { get; set; }
         public DelegateCommand DeliveryCommand { get; set; }
@@ -28,8 +27,7 @@ namespace Receiptionist.ViewModels
             get { return Container.Current.Resolve<AppViewModel>(); }
         }
         #endregion
-
-
+        
         #region Methods
 
         public void ExecuteMeeting(object parameter)
