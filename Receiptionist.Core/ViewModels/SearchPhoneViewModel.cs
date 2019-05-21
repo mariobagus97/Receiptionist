@@ -4,6 +4,7 @@ using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
 using Receiptionist.Core.ModelServices;
 using Receiptionist.Core.ModelServices.Infrastructure;
+using Receiptionist.Core.ModelServices.WebApi;
 using Receiptionist.Core.ViewModels;
 using Receiptionist.Infrastructure;
 using System;
@@ -21,10 +22,10 @@ namespace Receiptionist.ViewModels
         #endregion
 
         #region Properties
-
-        public IVisitorRepository VisitorRepository
+        
+        public SskRestRepository RestRepository
         {
-            get { return Container.Current.Resolve<IVisitorRepository>(); }
+            get { return Container.Current.Resolve<SskRestRepository>(); }
         }
 
         public AppViewModel AppViewModel
@@ -48,10 +49,12 @@ namespace Receiptionist.ViewModels
                     this.MessagePresenter.Show("Masukan nomor handphone");
                 else
                 {
-                    this.Visitor.Phone = this.SearchPhone;
+                    //this.Visitor.Phone = this.SearchPhone;
 
-                    RestRepositoryBase<Visitor> RepositoryVisitor = new RestRepositoryBase<Visitor>();
-                    this.Visitor = await RepositoryVisitor.GetVisitorAsync(this.Visitor);
+                    //RestRepositoryBase<Visitor> RepositoryVisitor = new RestRepositoryBase<Visitor>();
+                    //this.Visitor = await RepositoryVisitor.GetVisitorAsync(this.Visitor);
+
+                    this.Visitor = await RestRepository.GetVisitorAsync(this.SearchPhone);
                     
                     if (string.IsNullOrEmpty(this.Visitor.Name))
                     {

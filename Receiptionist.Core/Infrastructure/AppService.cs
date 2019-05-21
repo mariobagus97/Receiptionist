@@ -10,6 +10,7 @@ using Receiptionist.Core.ViewModels;
 using Receiptionist.Core.ModelServices;
 using Receiptionist.Core.ModelServices.Infrastructure;
 using Intersoft.Crosslight.Containers;
+using Receiptionist.Core.ModelServices.WebApi;
 
 namespace Receiptionist.Infrastructure
 {
@@ -61,7 +62,9 @@ namespace Receiptionist.Infrastructure
             Container.Current.Register<IVisitorRepository, VisitorRepository>().WithLifetimeManager(new ContainerLifetime());
             Container.Current.Register<IGeneralSettingRepository, GeneralSettingRepository>().WithLifetimeManager(new ContainerLifetime());
             Container.Current.Register<IMeetingRepository, MeetingRepository>().WithLifetimeManager(new ContainerLifetime());
-            
+
+            SskRestRepository SskRestRepository = new SskRestRepository();
+            Container.Current.RegisterInstance(SskRestRepository);
         }
 
         private void InitializeSettingTable()

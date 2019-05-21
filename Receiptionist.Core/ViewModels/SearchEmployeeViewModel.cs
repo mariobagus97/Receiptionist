@@ -3,6 +3,7 @@ using Intersoft.Crosslight.Input;
 using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
 using Receiptionist.Core.ModelServices;
+using Receiptionist.Core.ModelServices.WebApi;
 using Receiptionist.Core.ViewModels;
 using Receiptionist.Infrastructure;
 using System;
@@ -55,6 +56,9 @@ namespace Receiptionist.ViewModels
 
                     RestRepositoryBase<Meeting> RepositoryMeeting = new RestRepositoryBase<Meeting>();
                     this.Item = await RepositoryMeeting.GetEmployeeAsync(AppViewModel.Meeting);
+
+                    //SskRestRepository RestRepository = new SskRestRepository();
+                    //Employee employee = await RestRepository.GetEmployeeAsync(this.SearchEmployee);
                     
                     if (this.Item.Employees.Count == 0)
                         this.MessagePresenter.Show("Karyawan tidak ditemukan");

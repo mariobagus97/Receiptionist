@@ -4,6 +4,8 @@ using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
 using Receiptionist.Core.ModelServices;
 using Receiptionist.Core.ModelServices.Infrastructure;
+using Receiptionist.Core.ModelServices.WebApi;
+using Receiptionist.Core.RestRequestModel;
 using Receiptionist.Core.ViewModels;
 using Receiptionist.Infrastructure;
 using System;
@@ -27,7 +29,11 @@ namespace Receiptionist.ViewModels
         public string SearchPin { get; set; }
         public string SearchKey { get; set; }
         public Meeting Meeting { get; set; }
-        
+
+        public SskRestRepository RestRepository
+        {
+            get { return Container.Current.Resolve<SskRestRepository>(); }
+        }
 
         public AppViewModel AppViewModel
         {
@@ -62,9 +68,15 @@ namespace Receiptionist.ViewModels
                     Meeting.MeetingPin = this.SearchPin;
                     Meeting.MeetingKey = this.SearchKey;
 
-                    RestRepositoryBase<Meeting> RepositoryMeeting = new RestRepositoryBase<Meeting>();
+                    //RestRepositoryBase<Meeting> RepositoryMeeting = new RestRepositoryBase<Meeting>();
+                    //Meeting Meetingin = await RepositoryMeeting.GetMeetingAsync(Meeting);
 
-                    Meeting Meetingin = await RepositoryMeeting.GetMeetingAsync(Meeting);
+                    GetMeetingRequestParameter getMeetingRequestParameter = new GetMeetingRequestParameter();
+                    getMeetingRequestParameter.MeetingPin = this.SearchPin;
+                    getMeetingRequestParameter.MeetingKey = this.SearchKey;
+                    
+                    Meeting Meetingin = await RestRepository.GetMeetingAsync(getMeetingRequestParameter);
+
                     if (Meetingin == null)
                     {
                         this.MessagePresenter.Show("Data tidak ditemukan");

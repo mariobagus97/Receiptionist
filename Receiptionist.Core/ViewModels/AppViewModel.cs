@@ -1,6 +1,8 @@
 ﻿using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
 using Receiptionist.Core.ModelServices;
+using Receiptionist.Core.ModelServices.WebApi;
+using Receiptionist.Infrastructure;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,13 +17,17 @@ namespace Receiptionist.Core.ViewModels
         #endregion
 
         #region Properties
+
         public Meeting Meeting { get; set; }
         public GeneralSetting GeneralSetting { get; set; }
         public Setting Setting { get; set; }
-        
+
+        public SskRestRepository RestRepository
+        {
+            get { return Container.Current.Resolve<SskRestRepository>(); }
+        }
 
         #endregion
-
 
         #region Methods
 
@@ -36,9 +42,11 @@ namespace Receiptionist.Core.ViewModels
 
         public async Task<Meeting> SaveMeeting(Meeting meeting)
         {
-            RestRepositoryBase<Meeting> RepositoryMeeting = new RestRepositoryBase<Meeting>();
+           // RestRepositoryBase<Meeting> RepositoryMeeting = new RestRepositoryBase<Meeting>();
+           //Meeting meetings = await RepositoryMeeting.InsertAsync(meeting);
 
-           Meeting meetings = await RepositoryMeeting.InsertAsync(meeting);
+            //SskRestRepository repository = new SskRestRepository();
+            Meeting meetings = await RestRepository.SaveMeetingAsync(meeting);
 
             return meetings;
         }

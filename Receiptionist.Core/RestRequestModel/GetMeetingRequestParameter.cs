@@ -8,7 +8,7 @@ namespace Receiptionist.Core.RestRequestModel
 {
    public class GetMeetingRequestParameter
     {
-        public string MeetingId { get; set; }
+        public string MeetingKey { get; set; }
         public string MeetingPin { get; set; }
     }
 }

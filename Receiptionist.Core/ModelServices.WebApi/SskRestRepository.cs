@@ -10,8 +10,8 @@ namespace Receiptionist.Core.ModelServices.WebApi
     {
         #region Fields
         private IRestClient _restClient;
-        private string baseUrl = "http://192.168.1.56:58360";
-        //private string baseUrl = "http://192.168.8.100:58360";
+       // private string baseUrl = "http://192.168.1.77:58360";
+        private string baseUrl = "http://192.168.8.100:58360";
         //private string baseUrl = "http://webreciptionistnew-test.ap-southeast-1.elasticbeanstalk.com";
 
         #endregion

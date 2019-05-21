@@ -4,6 +4,7 @@ using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
 using Receiptionist.Core.ModelServices;
 using Receiptionist.Core.ModelServices.Infrastructure;
+using Receiptionist.Core.ModelServices.WebApi;
 using Receiptionist.Infrastructure;
 using Receiptionist.ViewModels;
 using System;
@@ -52,11 +53,10 @@ namespace Receiptionist.Core.ViewModels
             get { return Container.Current.Resolve<AppViewModel>(); }
         }
 
-        public IMeetingRepository MeetingRepository
+        public SskRestRepository RestRepository
         {
-            get { return Container.Current.Resolve<IMeetingRepository>(); }
+            get { return Container.Current.Resolve<SskRestRepository>(); }
         }
-
         #endregion
 
         #region Methods
@@ -128,8 +128,8 @@ namespace Receiptionist.Core.ViewModels
         
         public async void NotifyEmail()
         {
-            RestRepositoryBase<Meeting> repository = new RestRepositoryBase<Meeting>();
-            Meeting meetings = await repository.NotifyEmailAsync(this.Item);
+            Meeting meetings = await RestRepository.NotifyEmailAsync(this.Item);
+
             if (meetings != null)
             {
                 foreach (var employee in meetings.Employees)
