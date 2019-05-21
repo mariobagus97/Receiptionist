@@ -2,6 +2,7 @@
 using Intersoft.Crosslight.RestClient;
 using Receiptionist.Core.Models;
 using Receiptionist.Core.RestRequestModel;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Receiptionist.Core.ModelServices.WebApi
@@ -39,15 +40,18 @@ namespace Receiptionist.Core.ModelServices.WebApi
 
         #region methods
 
-        public virtual async Task<Employee> GetEmployeeAsync(string name)
+        public virtual async Task<List<Employee>> GetEmployeeAsync(string EmployeeName)
         {
             IRestRequest postRequest = new RestRequest("data/Search/SearchingEmployee", HttpMethod.POST);
             postRequest.RequestFormat = RequestDataFormat.Json;
 
-            postRequest.AddBody(name);
+            GetEmployeeRequestParameter GetEmployeeRequestParameter = new GetEmployeeRequestParameter();
+            GetEmployeeRequestParameter.Name = EmployeeName;
+
+            postRequest.AddBody(GetEmployeeRequestParameter);
             IRestResponse postResponse = await RestClient.ExecuteAsync(postRequest);
 
-            Employee data = SimpleJson.DeserializeObject<Employee>(postResponse.Content);
+            List<Employee> data = SimpleJson.DeserializeObject<List<Employee>>(postResponse.Content);
 
             return data;
         }
@@ -57,11 +61,13 @@ namespace Receiptionist.Core.ModelServices.WebApi
             IRestRequest postRequest = new RestRequest("data/Search/SearchingVisitor", HttpMethod.POST);
             postRequest.RequestFormat = RequestDataFormat.Json;
 
-            postRequest.AddBody(phoneNumber);
+            GetVisitorRequestParameter GetVisitorRequestParameter = new GetVisitorRequestParameter();
+            GetVisitorRequestParameter.PhoneNumber = phoneNumber;
+
+            postRequest.AddBody(GetVisitorRequestParameter);
             IRestResponse postResponse = await RestClient.ExecuteAsync(postRequest);
 
             Visitor data = SimpleJson.DeserializeObject<Visitor>(postResponse.Content);
-
             return data;
         }
 
@@ -89,20 +95,6 @@ namespace Receiptionist.Core.ModelServices.WebApi
             Meeting data = SimpleJson.DeserializeObject<Meeting>(postResponse.Content);
 
             return data;
-
-            //try
-            //{
-            //    IRestResponse<Meeting> postResponse = await client.ExecuteAsync<Meeting>(postRequest);
-
-            //    if (postResponse.Data == null)
-            //        throw new Exception(postResponse.Content);
-
-            //    return postResponse.Data;
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
-            //}
         }
 
         public virtual async Task<Meeting> NotifyEmailAsync(Meeting entity)
@@ -114,10 +106,36 @@ namespace Receiptionist.Core.ModelServices.WebApi
             IRestResponse postResponse = await RestClient.ExecuteAsync(postRequest);
 
             Meeting data = SimpleJson.DeserializeObject<Meeting>(postResponse.Content);
-
             return data;
         }
 
+        //public virtual async Task<Meeting> SaveMeetingAsync(Meeting entity)
+        //{
+        //    IRestRequest postRequest = new RestRequest("data/SelfKios/NewMeeting", HttpMethod.POST);
+        //    postRequest.RequestFormat = RequestDataFormat.Json;
+
+        //    postRequest.AddBody(entity);
+
+        //    IRestResponse postResponse = await RestClient.ExecuteAsync(postRequest);
+
+        //    Meeting data = SimpleJson.DeserializeObject<Meeting>(postResponse.Content);
+
+        //    return data;
+
+        //    //try
+        //    //{
+        //    //    IRestResponse<Meeting> postResponse = await client.ExecuteAsync<Meeting>(postRequest);
+
+        //    //    if (postResponse.Data == null)
+        //    //        throw new Exception(postResponse.Content);
+
+        //    //    return postResponse.Data;
+        //    //}
+        //    //catch (Exception ex)
+        //    //{
+        //    //    throw ex;
+        //    //}
+        //}
         #endregion
     }
 }

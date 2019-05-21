@@ -10,10 +10,7 @@ namespace Receiptionist.Core.ViewModels
         public override void Navigated(NavigatedParameter parameter)
         {
             base.Navigated(parameter);
-            
-            Meeting meeting = parameter.Data as Meeting;
-
-            this.SourceItems = meeting.Employees as ICollection<Employee>;
+            this.SourceItems = parameter.Data as ICollection<Employee>;
             
         }
     }

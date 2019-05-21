@@ -2,8 +2,6 @@
 using Intersoft.Crosslight.Input;
 using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
-using Receiptionist.Core.ModelServices;
-using Receiptionist.Core.ModelServices.Infrastructure;
 using Receiptionist.Core.ModelServices.WebApi;
 using Receiptionist.Infrastructure;
 using Receiptionist.ViewModels;

@@ -59,13 +59,15 @@
     <Compile Include="ModelServices.Local\VisitorRepository.cs" />
     <Compile Include="ModelServices.Local\MeetingRepository.cs" />
     <Compile Include="ModelServices.Local\EmployeeRepository.cs" />
-    <Compile Include="ModelServices.WebApi\RestRepositoryBase.cs" />
     <Compile Include="ModelServices.WebApi\SskRestRepository.cs" />
     <Compile Include="Models\EmailValidation.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\GeneralSetting.cs" />
     <Compile Include="Models\Setting.cs" />
+    <Compile Include="RestRequestModel\GetEmployeeRequestParameter.cs" />
     <Compile Include="RestRequestModel\GetMeetingRequestParameter.cs" />
+    <Compile Include="RestRequestModel\GetVisitorRequestParameter.cs" />
+    <Compile Include="RestResponeBase\ResponeBase.cs" />
     <Compile Include="Utilities\Timer.cs" />
     <Compile Include="Models\VisitorMeeting.cs" />
     <Compile Include="Models\EmployeeMeeting.cs" />

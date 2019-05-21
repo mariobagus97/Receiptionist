@@ -2,8 +2,6 @@
 using Intersoft.Crosslight.Input;
 using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
-using Receiptionist.Core.ModelServices;
-using Receiptionist.Core.ModelServices.Infrastructure;
 using Receiptionist.Core.ModelServices.WebApi;
 using Receiptionist.Core.ViewModels;
 using Receiptionist.Infrastructure;
@@ -44,35 +42,36 @@ namespace Receiptionist.ViewModels
         {
             try
             {
+                this.ActivityPresenter.Show("Loading...", ActivityStyle.SmallIndicatorWithText);
                 AppViewModel.Meeting.Visitors.Clear();
                 if (string.IsNullOrEmpty(this.SearchPhone))
                     this.MessagePresenter.Show("Masukan nomor handphone");
                 else
                 {
-                    //this.Visitor.Phone = this.SearchPhone;
-
-                    //RestRepositoryBase<Visitor> RepositoryVisitor = new RestRepositoryBase<Visitor>();
-                    //this.Visitor = await RepositoryVisitor.GetVisitorAsync(this.Visitor);
-
                     this.Visitor = await RestRepository.GetVisitorAsync(this.SearchPhone);
-                    
+
                     if (string.IsNullOrEmpty(this.Visitor.Name))
                     {
                         this.NavigationService.Navigate<RegisterViewModel>(new NavigationParameter());
+                        this.Visitor.VisitorID = Guid.NewGuid();
                         this.Visitor.Phone = this.SearchPhone;
+                        
                         AppViewModel.Meeting.Visitors.Add(this.Visitor);
                     }
                     else
                     {
                         this.NavigationService.Navigate<PurposeViewModel>(new NavigationParameter());
                         AppViewModel.Meeting.Visitors.Add(this.Visitor);
+                        AppViewModel.Meeting.NameVisitor = this.Visitor.Name;
                     }
+                    
                 }
             }
             catch (Exception ex)
             {
                 this.ToastPresenter.Show(ex.Message);
             }
+            this.ActivityPresenter.Hide();
         }
         
         public  override void Navigated(NavigatedParameter parameter)

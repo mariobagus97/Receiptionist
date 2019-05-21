@@ -42,12 +42,7 @@ namespace Receiptionist.Core.ViewModels
 
         public async Task<Meeting> SaveMeeting(Meeting meeting)
         {
-           // RestRepositoryBase<Meeting> RepositoryMeeting = new RestRepositoryBase<Meeting>();
-           //Meeting meetings = await RepositoryMeeting.InsertAsync(meeting);
-
-            //SskRestRepository repository = new SskRestRepository();
             Meeting meetings = await RestRepository.SaveMeetingAsync(meeting);
-
             return meetings;
         }
 

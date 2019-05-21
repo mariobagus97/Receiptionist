@@ -2,11 +2,11 @@
 using Intersoft.Crosslight.Input;
 using Intersoft.Crosslight.ViewModels;
 using Receiptionist.Core.Models;
-using Receiptionist.Core.ModelServices;
 using Receiptionist.Core.ModelServices.WebApi;
 using Receiptionist.Core.ViewModels;
 using Receiptionist.Infrastructure;
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Receiptionist.ViewModels
@@ -33,93 +33,87 @@ namespace Receiptionist.ViewModels
         {
             get { return Container.Current.Resolve<AppViewModel>(); }
         }
-        
 
+        public SskRestRepository RestRepository
+        {
+            get { return Container.Current.Resolve<SskRestRepository>(); }
+        }
         #endregion
-
         
-
         public async void ExecuteSearchEmployee(object parameter)
         {
-           AppViewModel.Meeting.Employees.Clear();
-           if (string.IsNullOrEmpty(this.SearchEmployee))
-               this.MessagePresenter.Show("Masukan email karyawan");
+            AppViewModel.Meeting.Employees.Clear();
+            if (string.IsNullOrEmpty(this.SearchEmployee))
+                this.MessagePresenter.Show("Masukan email karyawan");
             else
             {
                 try
                 {
-                    this.Employee.Name = this.SearchEmployee;
-
-                    AppViewModel.Meeting.Employees.Add(this.Employee);
-
                     this.ToastPresenter.Show("Waiting...");
+                    List<Employee> Employees = await RestRepository.GetEmployeeAsync(this.SearchEmployee);
 
-                    RestRepositoryBase<Meeting> RepositoryMeeting = new RestRepositoryBase<Meeting>();
-                    this.Item = await RepositoryMeeting.GetEmployeeAsync(AppViewModel.Meeting);
-
-                    //SskRestRepository RestRepository = new SskRestRepository();
-                    //Employee employee = await RestRepository.GetEmployeeAsync(this.SearchEmployee);
-                    
-                    if (this.Item.Employees.Count == 0)
+                    if (Employees.Count == 0)
                         this.MessagePresenter.Show("Karyawan tidak ditemukan");
                     else
                     {
                         var employeee = new StringBuilder();
-                        foreach (var meetings in this.Item.Employees)
+                        foreach (var employee in Employees)
                         {
-                            employeee.Append(meetings.Name);
+                            employeee.Append(employee.Name);
                             employeee.AppendLine();
                         }
                         this.Item.NameEmployee = employeee.ToString();
 
                         NavigationParameter parameters = new NavigationParameter
                         {
-                            Data = this.Item
+                            Data = Employees
                         };
 
                         DialogOptions dialogOptions = new DialogOptions();
-                        
-                        this.DialogPresenter.Show<ListEmployeeViewModel>(parameters, 
-                            new DialogOptions() {
 
-                            Title = "List Employee",
-                            Buttons = (DialogButton.Negative | DialogButton.Positive ),
-                            NegativeButtonText = "Cancel",
-                            PositiveButtonText = "OK",
+                        this.DialogPresenter.Show<ListEmployeeViewModel>(parameters,
+                            new DialogOptions()
+                            {
+
+                                Title = "List Employee",
+                                Buttons = (DialogButton.Negative | DialogButton.Positive),
+                                NegativeButtonText = "Cancel",
+                                PositiveButtonText = "OK",
 
                             }, (dialogResult) =>
-                        {
-                            var viewModel = dialogResult.ViewModel as ListEmployeeViewModel; 
-
-                            string button = dialogResult.Button.ToString();
-
-                            if (button == "Positive")
                             {
-                                if (viewModel.SelectedItem != null)
-                                { 
-                                    this.Employee = viewModel.SelectedItem;
-                                    
-                                    this.Item.Employees.Clear();
-                                    this.Item.Employees.Add(this.Employee);
-                                    this.ExecuteDone(null);
+                                var viewModel = dialogResult.ViewModel as ListEmployeeViewModel;
+
+                                string button = dialogResult.Button.ToString();
+
+                                if (button == "Positive")
+                                {
+                                    if (viewModel.SelectedItem != null)
+                                    {
+
+                                        this.Employee = viewModel.SelectedItem;
+                                        //this.Item.Employees = new List<Employee>();
+                                        //this.Item.Employees.Add(this.Employee);
+                                        AppViewModel.Meeting.Employees.Add(this.Employee);
+                                        this.ExecuteDone(null);
+                                    }
+                                    else
+                                    {
+                                        this.ToastPresenter.Show("Anda belum memilih karyawan");
+                                    }
                                 }
                                 else
                                 {
+                                    this.Item = new Meeting();
                                     this.ToastPresenter.Show("Anda belum memilih karyawan");
                                 }
-                            }
-                            else
-                            {
-                                this.Item = new Meeting();
-                                this.ToastPresenter.Show("Anda belum memilih karyawan");
-                            }
-                            
-                        } );
+
+                            });
                     }
                 }
                 catch (Exception ex)
                 {
-                    this.MessagePresenter.Show(ex.Message);
+                    this.ToastPresenter.Show(ex.Message);
                 }
             }
         }
@@ -128,9 +122,11 @@ namespace Receiptionist.ViewModels
         {
             try
             {
-                if (this.Item.NameEmployee != null)
+                this.ActivityPresenter.Show("Loading...", ActivityStyle.SmallIndicatorWithText);
+                if (!string.IsNullOrEmpty(this.Item.NameEmployee))
                 {
-                    AppViewModel.Meeting = await AppViewModel.SaveMeeting(this.Item);
+                    AppViewModel.Meeting.NameEmployee = this.Item.NameEmployee;
+                    AppViewModel.Meeting = await AppViewModel.SaveMeeting(AppViewModel.Meeting);
                     this.NavigationService.Navigate<MeetingDetailViewModel>(new NavigationParameter());
                 }
                 else
@@ -138,8 +134,9 @@ namespace Receiptionist.ViewModels
             }
             catch (Exception ex)
             {
-                this.MessagePresenter.Show(ex.Message);
+                this.ToastPresenter.Show(ex.Message);
             }
+            this.ActivityPresenter.Hide();
         }
 
 
@@ -149,6 +146,6 @@ namespace Receiptionist.ViewModels
             this.Employee = new Employee();
             this.Item = new Meeting();
         }
-        
+
     }
 }

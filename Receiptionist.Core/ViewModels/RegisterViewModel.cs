@@ -60,44 +60,34 @@ namespace Receiptionist.ViewModels
                 var emailvalidate = email.ValidateEmail(this.EmailText);
                 
                 if (string.IsNullOrEmpty(this.NameText))
-                {
                     this.MessagePresenter.Show("Nama tidak boleh kosong");
-                }
-
                 else if (string.IsNullOrEmpty(this.EmailText))
-                {
                     this.MessagePresenter.Show("Email tidak boleh kosong");
-                }
-
                 else if (emailvalidate == false)
-                {
                     this.MessagePresenter.Show("Email is Not Valid");
-
-                }
-
                 else if (string.IsNullOrEmpty(this.PhoneText))
-                {
                     this.MessagePresenter.Show("Nomor telephone tidak boleh kosong");
-                }
-
                 else
                 {
                     this.Item.Name = this.NameText;
                     this.Item.Email = this.EmailText;
                     this.Item.Phone = this.PhoneText;
                     this.Item.Company = this.CompanyText;
-                    
-                    AppViewModel.Meeting.Visitors = new List<Visitor>();
-                    AppViewModel.Meeting.Visitors.Add(this.Item);
+
+                    AppViewModel.Meeting.Visitors = new List<Visitor>
+                    {
+                        this.Item
+                    };
+                    AppViewModel.Meeting.NameVisitor = this.NameText;
                     this.NavigationService.Navigate<PurposeViewModel>(new NavigationParameter());
                 }
             }
 
             catch (Exception ex)
             {
+
                 this.MessagePresenter.Show(ex.Message);
             }
-
         }
 
         public override void Navigated(NavigatedParameter parameter)
